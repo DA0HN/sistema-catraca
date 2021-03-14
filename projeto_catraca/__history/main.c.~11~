@@ -1,0 +1,29 @@
+#include <main.h>
+#include "mod_lcd.c"
+#include "teclado.c"
+
+unsigned int tmp;
+
+
+void main()
+{
+   port_B_pullups(0xFF);
+ 
+   enable_interrupts(INT_RB);
+   enable_interrupts(GLOBAL);
+
+   lcd_ini();
+   delay_ms(50);
+
+   output_low(PIN_B0);
+   output_low(PIN_B1);
+   output_low(PIN_B2);
+   output_low(PIN_B3);
+   printf(lcd_escreve, "\f Teclado");
+   delay_ms(2000);
+
+   while(TRUE)
+   {
+      //printf(lcd_escreve, "T:%f |R:%d", temp, valorTemp);
+   }
+}
