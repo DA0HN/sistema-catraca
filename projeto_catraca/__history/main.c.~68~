@@ -4,6 +4,7 @@
 #include "teclado.c"
 
 unsigned char tmp;
+char valor = "";
 char senha[4];
 int posicao = 0;
 
@@ -17,8 +18,10 @@ void RB_isr(void)
     tmp = tc_tecla();
    
    if(tmp!= 255){
+     valor = tmp;
+     
      if(posicao > 3){
-      // incluir na memoria antes de resetar
+      // incluir na memoria
          posicao = 0;
          senha = "\0";
      }
@@ -27,8 +30,7 @@ void RB_isr(void)
      posicao++;
    }
    
-   //printf(lcd_escreve, "\fValor: %c\n", valor); 
-   printf(lcd_escreve, "\fSenha: %s", senha); 
+   printf(lcd_escreve, "\fValor: %c", valor); 
    clear_interrupt(INT_RB);
    enable_interrupts(INT_RB);
 

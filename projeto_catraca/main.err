@@ -1,0 +1,7 @@
+>>> Warning 216 "main.c" Line 60(1,2): Interrupts disabled during call to prevent re-entrancy:  (@delay_ms1)
+>>> Warning 216 "main.c" Line 60(1,2): Interrupts disabled during call to prevent re-entrancy:  (lcd_envia_nibble)
+>>> Warning 216 "main.c" Line 60(1,2): Interrupts disabled during call to prevent re-entrancy:  (lcd_envia_byte)
+>>> Warning 216 "main.c" Line 60(1,2): Interrupts disabled during call to prevent re-entrancy:  (lcd_escreve)
+      Memory usage:   ROM=12%      RAM=7% - 14%
+      0 Errors,  4 Warnings.
+Build Successful.

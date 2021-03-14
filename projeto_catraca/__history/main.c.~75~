@@ -17,6 +17,8 @@ void RB_isr(void)
     tmp = tc_tecla();
    
    if(tmp!= 255){
+
+     
      if(posicao > 3){
       // incluir na memoria antes de resetar
          posicao = 0;

@@ -28,7 +28,6 @@ unsigned char tc_tecla(){
     if (input(PIN_B5) == 0){while(input(PIN_B5) == 0);k='B';};
     if (input(PIN_B6) == 0){while(input(PIN_B6) == 0);k='C';};
     if (input(PIN_B7) == 0){while(input(PIN_B7) == 0);k='D';};
-    
     if(!k)k=255;
     
     return k;
