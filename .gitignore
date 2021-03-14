@@ -6,4 +6,5 @@
 *.sym
 *.tre
 *.xsym
-__history/*
+__history/
+*.esym
