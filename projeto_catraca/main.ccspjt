@@ -14,7 +14,7 @@ Type=4
 1=main.c
 [Opened Files]
 1=main.c
-2=teclado.c
+2=i2c.c
 3=
 4=
 5=

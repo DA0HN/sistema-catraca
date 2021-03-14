@@ -2,27 +2,34 @@
 
 #include "mod_lcd.c"
 #include "teclado.c"
+#include "i2c.c"
 
 unsigned char tmp;
-char vetor[4];
+char senha[4];
 int posicao = 0;
+
+
 #INT_RB
 void RB_isr(void) 
 {
    disable_interrupts(INT_RB);
    clear_interrupt(INT_RB);
-
-   tmp = tc_tecla();
-
-   if (tmp!=255){
    
-      vetor[posicao] = tmp;
-      printf(lcd_escreve, "\fBotao: %c", tmp);     
-      tmp= 255;
-   }else{
-       printf(lcd_escreve, "\fTeclado");
+    tmp = tc_tecla();
+   
+   if(tmp!= 255){
+     if(posicao > 3){
+      // incluir na memoria antes de resetar
+         posicao = 0;
+         senha = "\0";
+     }
+     
+     senha[posicao] = tmp;
+     posicao++;
    }
-
+   
+   //printf(lcd_escreve, "\fValor: %c\n", valor); 
+   printf(lcd_escreve, "\fSenha: %s", senha); 
    clear_interrupt(INT_RB);
    enable_interrupts(INT_RB);
 
@@ -34,6 +41,12 @@ void RB_isr(void)
 
 void main()
 {
+   byte dispositivo1 = 0x0;
+   
+   setup_psp(PSP_DISABLED);
+   setup_comparator(NC_NC_NC_NC);
+   setup_vref(FALSE);
+   
    port_B_pullups(0xFF);
    
    lcd_ini();
@@ -42,14 +55,11 @@ void main()
    printf(lcd_escreve, "\f Teclado");
    delay_ms(1000);
    
-   
    enable_interrupts(INT_RB);
    enable_interrupts(GLOBAL);
    output_low(PIN_B0);output_low(PIN_B1);output_low(PIN_B2);output_low(PIN_B3);
   
 
-   while(TRUE)
-   {
-      //printf(lcd_escreve, "T:%f |R:%d", temp, valorTemp);
+   while(TRUE){   
    }
 }

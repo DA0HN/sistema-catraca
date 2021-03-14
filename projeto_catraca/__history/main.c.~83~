@@ -1,8 +1,15 @@
 #include <main.h>
-//#include "i2c.c"
+#include<stdio.h>
 #include "mod_lcd.c"
 #include "teclado.c"
 
+// Definições dos pinos de comunicação
+   #define scl  pin_C3      // pino de clock
+   #define sda  pin_C4      // pino de dados
+   #define EEPROM_SIZE  32768  // 24LC256 tamanho em bytes da memória EEPROM
+                               // 256k / 8 = 32k   => 2^15 32768
+
+#include "i2c.c"
 
 unsigned char tmp;
 char senha[4];
