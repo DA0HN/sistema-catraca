@@ -1,13 +1,15 @@
 #include <main.h>
-//#include "i2c.c"
+#include <math.h>
+#include <stdio.h>
 #include "mod_lcd.c"
 #include "teclado.c"
-
+#INCLUDE<2404.C>
 
 unsigned char tmp;
+char dado;
 char senha[4];
-int posicao = 0;
-
+int posicaoMemoria = 0;
+byte  dispositivo1 = 0;
 
 #INT_RB
 void RB_isr(void) 
@@ -16,20 +18,18 @@ void RB_isr(void)
    clear_interrupt(INT_RB);
    
     tmp = tc_tecla();
-   
+    
+   WRITE_EXT_EEPROM(0, 199);
+   WRITE_EXT_EEPROM(1, 5);
    if(tmp!= 255){
-     if(posicao > 3){
-      // incluir na memoria antes de resetar
-         posicao = 0;
-         senha = "\0";
-     }
-     
-     senha[posicao] = tmp;
-     posicao++;
+    dado = tmp;
+ 
    }
    
-   //printf(lcd_escreve, "\fValor: %c\n", valor); 
-   printf(lcd_escreve, "\fSenha: %s", senha); 
+  
+  // printf(lcd_escreve, "\fValor: %c\n\r", dado); 
+   printf(lcd_escreve, "\fPos0: %u\n\r",READ_EXT_EEPROM(0)); 
+    printf(lcd_escreve, "Pos1: %d",READ_EXT_EEPROM(1)); 
    clear_interrupt(INT_RB);
    enable_interrupts(INT_RB);
 
@@ -41,12 +41,8 @@ void RB_isr(void)
 
 void main()
 {
-   byte dispositivo1 = 0x0;
-   
-   setup_psp(PSP_DISABLED);
-   setup_comparator(NC_NC_NC_NC);
-   setup_vref(FALSE);
-   
+  INIT_EXT_EEPROM();
+ 
    port_B_pullups(0xFF);
    
    lcd_ini();
