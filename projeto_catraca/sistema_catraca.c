@@ -1,15 +1,14 @@
 #include <sistema_catraca.h>
 #include <math.h>
 #include <stdio.h>
+#INCLUDE<2404.C>
 #include "lib/lcd_util.c"
 #include "lib/teclado_util.c"
-#INCLUDE<2404.C>
+#include "lib/memoria_util.c"
 
 unsigned char tmp;
-char dado;
 char senha[4];
-int posicaoMemoria = 0;
-byte  dispositivo1 = 0;
+int posicaoSenha = 0;
 
 #INT_RB
 void RB_isr(void) 
@@ -18,18 +17,25 @@ void RB_isr(void)
    clear_interrupt(INT_RB);
    
     tmp = tc_tecla();
-    
-   WRITE_EXT_EEPROM(0, 199);
-   WRITE_EXT_EEPROM(1, 5);
-   if(tmp!= 255){
-    dado = tmp;
  
+   if(tmp!= 255){
+      if(posicaoSenha == 4){
+         posicaoSenha = 0;
+      }
+      
+      //implementar verifica posições nulas do vetor
+      if(tmp == 'D'){    
+         verificaUsuario(senha);    
+         senha[0] = senha[1] = senha[2] = senha[3] = '\0';
+      }else{
+         senha[posicaoSenha] = tmp;
+         posicaoSenha++;
+      }
    }
    
-  
-  // printf(lcd_escreve, "\fValor: %c\n\r", dado); 
-   printf(lcd_escreve, "\fPos0: %u\n\r",READ_EXT_EEPROM(0)); 
-    printf(lcd_escreve, "Pos1: %d",READ_EXT_EEPROM(1)); 
+   printf(lcd_escreve, "\f Academia C & G\n"); 
+   printf(lcd_escreve, "\r  Senha: %s", senha); 
+
    clear_interrupt(INT_RB);
    enable_interrupts(INT_RB);
 
@@ -41,9 +47,11 @@ void RB_isr(void)
 
 void main()
 {
-  INIT_EXT_EEPROM();
- 
-   port_B_pullups(0xFF);
+   
+   init_ext_eeprom();
+
+   configuracaoMemoria();
+   carregaMemoria();
    
    lcd_ini();
    delay_ms(10);
@@ -51,11 +59,15 @@ void main()
    printf(lcd_escreve, "\f Teclado");
    delay_ms(1000);
    
+   set_tris_b(0xF0);
+   port_B_pullups(true);
    enable_interrupts(INT_RB);
    enable_interrupts(GLOBAL);
    output_low(PIN_B0);output_low(PIN_B1);output_low(PIN_B2);output_low(PIN_B3);
   
 
-   while(TRUE){   
+   while(TRUE){  
+      
+   
    }
 }

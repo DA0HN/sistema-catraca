@@ -1,7 +1,7 @@
 [PROJECT]
 Target=sistema_catraca.hex
 Processor_Text=PIC16F877A
-CCSVersion=5.025
+CCSVersion=5.015
 Compiler=PCM
 [Target Data]
 FileList=sistema_catraca.c
@@ -20,7 +20,11 @@ D1_L3=[78796]Project Opened.
 
 [Opened Files]
 1=sistema_catraca.c
-2=
+2=lib\memoria_util.c
+3=lib\teclado_util.c
+4=
+[Directories]
+Include=C:\Program Files (x86)\PICC\Devices\;C:\Program Files (x86)\PICC\Drivers\
 [Units]
 Count=1
 1=sistema_catraca (main)
