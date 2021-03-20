@@ -15,5 +15,5 @@ module catraca.control.desktop {
   opens br.edu.ifmt.catracacontrol;
   opens br.edu.ifmt.catracacontrol.controllers;
   opens br.edu.ifmt.catracacontrol.views;
-//  opens br.edu.ifmt.catracacontrol.domain.model;
+  opens br.edu.ifmt.catracacontrol.domain.models;
 }
