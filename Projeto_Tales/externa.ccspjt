@@ -14,7 +14,7 @@ Type=4
 1=externa.c
 
 [ProjectLog]
-Days=2
+Days=3
 D1=16-03-2021
 D1_L=6
 D1_L1=[75560]Project Opened.
@@ -63,10 +63,15 @@ D2_L29=[73787]Project Opened.
 D2_L30=[73835]Started Editing.
 D2_L31=[75077]Stopped Editing.
 D2_L32=[75196]Started Editing.
+D3=20-03-2021
+D3_L=2
+D3_L1=[41388]Project Opened.
+D3_L2=[41428]Started Editing.
 
 [Opened Files]
 1=externa.c
-2=
+2=lib\funcMemoria.c
+3=
 [externa.c]
 Type=4
 [Units]
