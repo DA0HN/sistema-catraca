@@ -1,8 +1,8 @@
-#include <main.h>
+#include <sistema_catraca.h>
 #include <math.h>
 #include <stdio.h>
-#include "mod_lcd.c"
-#include "teclado.c"
+#include "lib/lcd_util.c"
+#include "lib/teclado_util.c"
 #INCLUDE<2404.C>
 
 unsigned char tmp;

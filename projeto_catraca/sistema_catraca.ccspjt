@@ -1,0 +1,26 @@
+[PROJECT]
+Target=sistema_catraca.hex
+Processor_Text=PIC16F877A
+CCSVersion=5.025
+Compiler=PCM
+[Target Data]
+FileList=sistema_catraca.c
+[sistema_catraca.c]
+Type=4
+[mru-list]
+1=sistema_catraca.c
+
+[ProjectLog]
+Days=1
+D1=19-03-2021
+D1_L=3
+D1_L1=[78711]Project Opened.
+D1_L2=[78734]Project Closed.
+D1_L3=[78796]Project Opened.
+
+[Opened Files]
+1=sistema_catraca.c
+2=
+[Units]
+Count=1
+1=sistema_catraca (main)
