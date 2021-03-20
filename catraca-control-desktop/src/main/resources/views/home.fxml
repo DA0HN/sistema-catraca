@@ -1,14 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="br.edu.ifmt.catracacontrol.controllers.HomeController"
-            prefHeight="400.0" prefWidth="600.0">
 
+<AnchorPane blendMode="DARKEN" prefHeight="282.0" prefWidth="453.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.edu.ifmt.catracacontrol.controllers.HomeController">
+   <children>
+      <Text fontSmoothingType="LCD" layoutX="118.0" layoutY="32.0" stroke="#ff1a1a" strokeLineCap="ROUND" strokeLineJoin="BEVEL" strokeType="OUTSIDE" strokeWidth="0.0" text="CATRACA $ISTEM" AnchorPane.bottomAnchor="243.25" AnchorPane.leftAnchor="118.0" AnchorPane.rightAnchor="134.515625" AnchorPane.topAnchor="14.3046875">
+         <font>
+            <Font name="Sylfaen" size="24.0" />
+         </font>
+      </Text>
+      <Button fx:id="viewClientButton" layoutX="256.0" layoutY="124.0" mnemonicParsing="false" onMouseClicked="#viewClientButtonOnClick" prefHeight="25.0" prefWidth="124.0" text="consultar clientes" textOverrun="CLIP" AnchorPane.bottomAnchor="123.0" AnchorPane.rightAnchor="73.0" AnchorPane.topAnchor="124.0">
+         <font>
+            <Font name="Georgia" size="12.0" />
+         </font>
+      </Button>
+      <Button fx:id="createClientButton" layoutX="66.0" layoutY="124.0" mnemonicParsing="false" onMouseClicked="#createClientButtonOnClick" text="adicionar cliente" AnchorPane.bottomAnchor="123.0" AnchorPane.leftAnchor="66.0" AnchorPane.topAnchor="124.0">
+         <font>
+            <Font name="Georgia" size="12.0" />
+         </font>
+      </Button>
+      <Text fill="#d11717" fontSmoothingType="LCD" layoutX="113.0" layoutY="263.0" smooth="false" strokeType="OUTSIDE" strokeWidth="0.0" text="Desenvolvido por: Gabriel Honda &amp; Carlos Henrique" AnchorPane.bottomAnchor="8.720000267028809" AnchorPane.leftAnchor="113.0" AnchorPane.rightAnchor="115.81004333496094" AnchorPane.topAnchor="253.89999961853027">
+         <font>
+            <Font name="Ink Free" size="10.0" />
+         </font>
+      </Text>
+   </children>
 </AnchorPane>
