@@ -2,7 +2,7 @@ module catraca.control.desktop {
   // Javafx
   requires javafx.controls;
   requires javafx.fxml;
-  requires javafx.graphics;
+  requires com.jfoenix;
   // Lombok impl
   requires lombok;
   requires java.xml.bind;
@@ -15,5 +15,7 @@ module catraca.control.desktop {
   opens br.edu.ifmt.catracacontrol;
   opens br.edu.ifmt.catracacontrol.controllers;
   opens br.edu.ifmt.catracacontrol.views;
+  opens br.edu.ifmt.catracacontrol.domain.dto;
   opens br.edu.ifmt.catracacontrol.domain.models;
+  opens br.edu.ifmt.catracacontrol.domain.repositories;
 }
