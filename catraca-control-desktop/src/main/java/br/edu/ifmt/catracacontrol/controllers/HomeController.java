@@ -1,5 +1,6 @@
 package br.edu.ifmt.catracacontrol.controllers;
 
+import br.edu.ifmt.catracacontrol.views.CreateView;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -15,7 +16,9 @@ public class HomeController implements Initializable {
   @FXML private Button viewClientButton;
   @FXML private Button createClientButton;
 
-  @FXML private void createClientButtonOnClick(MouseEvent event) {
+  @FXML private void createClientButtonOnClick(MouseEvent event) throws Exception {
+    var createView = new CreateView();
+    createView.start(stage);
   }
 
   @FXML private void viewClientButtonOnClick(MouseEvent event) {
