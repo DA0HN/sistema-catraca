@@ -26,7 +26,7 @@ void saveM(){ //ok
    }
  }
 }
-
+//Fazer if do erro
 void consultaM(int x){ //ok // X é o referencial da matriz
    printf(lcd_escreve,"\f Cadastro: %c \n",dados[x][0]);
    printf(lcd_escreve,"\r Senha: ");
@@ -36,25 +36,12 @@ void consultaM(int x){ //ok // X é o referencial da matriz
 }
 
 int cadastradoU(unsigned char user[1]){
-   int encontrou = 0;
-    for(int i = 0;i<16;i++){
-       encontrou = 0;
-      for(int f = 0;f<1;f++){
-         if (user[f] == dados[i][f]){
-            encontrou++;
-            if(encontrou == 1)
-               return i;
-         }
+   for(int i = 0;i<16;i++){
+      if (user[0] == dados[i][0]){
+         return i;  
       }
-    }
-    return 42;
-}
-
-void editaSM(int pos, unsigned char nova[4]){ //ok // pos é o referencial do usuário e nova é a nova senha.
-   for(int i = 0;i<4;i++){
-      dados[pos][i+2] = nova[i];
    }
-   saveM();
+   return 42;
 }
 
 int verificaVazio(){
