@@ -1,0 +1,74 @@
+[PROJECT]
+Target=externa.hex
+Processor_Text=PIC16F877A
+CCSVerions=5.025
+Compiler=PCM
+CCSVersion=5.025
+[Target Data]
+FileList=externa.c
+[Directories]
+Include=
+[D:\tales\Documents\Faculdade\Projetos Micro\ProjetoFinal\MemoriaExterna\externa]
+Type=4
+[mru-list]
+1=externa.c
+
+[ProjectLog]
+Days=2
+D1=16-03-2021
+D1_L=6
+D1_L1=[75560]Project Opened.
+D1_L2=[75736]Started Editing.
+D1_L3=[76036]Stopped Editing.
+D1_L4=[76315]Started Editing.
+D1_L5=[76692]Stopped Editing.
+TotalEdit=154
+TotalDebug=0
+D1_E=2
+D1_D=0
+D1_L6=[77115]Project Closed.
+D2=19-03-2021
+D2_L=32
+D2_L1=[59680]Project Opened.
+D2_L2=[59753]Started Editing.
+D2_L3=[60718]Stopped Editing.
+D2_E=152
+D2_D=0
+D2_L4=[60718]Project Closed.
+D2_L5=[60727]Project Opened.
+D2_L6=[60767]Started Editing.
+D2_L7=[61251]Stopped Editing.
+D2_L8=[61251]Project Closed.
+D2_L9=[61262]Project Opened.
+D2_L10=[61272]Started Editing.
+D2_L11=[62148]Stopped Editing.
+D2_L12=[62148]Project Closed.
+D2_L13=[62155]Project Opened.
+D2_L14=[62211]Started Editing.
+D2_L15=[62245]Stopped Editing.
+D2_L16=[62245]Project Closed.
+D2_L17=[62252]Project Opened.
+D2_L18=[62267]Started Editing.
+D2_L19=[62319]Stopped Editing.
+D2_L20=[62319]Project Closed.
+D2_L21=[62326]Project Opened.
+D2_L22=[62348]Started Editing.
+D2_L23=[65723]Stopped Editing.
+D2_L24=[65724]Project Closed.
+D2_L25=[66487]Project Opened.
+D2_L26=[66500]Started Editing.
+D2_L27=[69585]Stopped Editing.
+D2_L28=[69585]Project Closed.
+D2_L29=[73787]Project Opened.
+D2_L30=[73835]Started Editing.
+D2_L31=[75077]Stopped Editing.
+D2_L32=[75196]Started Editing.
+
+[Opened Files]
+1=externa.c
+2=
+[externa.c]
+Type=4
+[Units]
+Count=1
+1=externa (main)
