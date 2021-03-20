@@ -27,14 +27,16 @@
 #include "lib/funcMemoria.c"
 
 //#use rs232(baud=9600, xmit=PIN_C6, rcv=PIN_C7, Serial)
+
 unsigned char tmp;
 int countSs = 0;
 unsigned char senhaDigitada[] = {'-','-','-','-'};
+int modoAdm = 42, senhaAdm = 43;
 void clearD(){
    countSs = 0;
    senhaDigitada[0] = senhaDigitada[1] = senhaDigitada[2] = senhaDigitada[3] = '-';
 }
-int msgTela[] = {0,1,0};
+int msgTela[] = {0,1,0,0};
 void mostraTela(int mostra){
    if(mostra == 1){
       if(msgTela[0] == 1){
@@ -53,27 +55,40 @@ void mostraTela(int mostra){
       }
    }else if(mostra == 3){
       if(msgTela[2] == 1){
-         printf(lcd_escreve, "\f    Adm\n"); 
+         printf(lcd_escreve, "\f    ADM\n"); 
          printf(lcd_escreve, "\r Dig sua Senha");
          msgTela[2] = 0;
-         msgTela[0] = 1;
-         msgTela[1] = 1;
+      }
+   }else if(mostra == 4){
+      if(msgTela[3] == 1){
+         printf(lcd_escreve, "\f Bem Vindo ADM\n"); 
+         printf(lcd_escreve, "\r Digite a opcao");
+         msgTela[3] = 0;
       }
    }
 }
-void liberaUser(){
+int liberaUser(){
    delay_ms(100);
    int selecionado = verificaS(senhaDigitada);
    if(selecionado!=42){
       printf(lcd_escreve,"\f Liberado!\n");
       printf(lcd_escreve,"\r Usuario: %c",valorM(selecionado,0));
+      return valorM(selecionado,0);
    }else{
       printf(lcd_escreve," \f Desconhecido!\n");
       printf(lcd_escreve," \r Bloqueado!\n");
+      return 42;
    }   
    msgTela[3] = 0;
    delay_ms(500);
    clearD();
+}
+void adm(){
+   if(modoAdm == 1 && senhaAdm == cadastradoU('0')){
+      printf(lcd_escreve, "\f Bem Vindo ADM\n"); 
+      printf(lcd_escreve, "\r Digite a opcao");
+      delay_ms(200);
+   }
 }
 #INT_RB
 void RB_isr(void) 
@@ -85,6 +100,7 @@ void RB_isr(void)
  
    if(tmp!= 255){   
       if(tmp == '*'){
+         modoAdm = 1;
          msgTela[2] = 1;
          mostraTela(3);
       }else{
@@ -93,19 +109,24 @@ void RB_isr(void)
          delay_ms(50);
       }
    }
-   if(countSs>0){
-      msgTela[0] = 1;
-      mostraTela(1);
-      delay_ms(10);
-   }else{ 
-      mostraTela(2);
-   }
+   if(msgTela[2] == 1){
+      
+   }else{
+      if(countSs>0){
+         msgTela[0] = 1;
+         mostraTela(1);
+         delay_ms(10);
+      }else{ 
+         mostraTela(2);
+      }
+   }   
+   
    
    if(countSs == 4){
-      liberaUser();
+      senhaAdm = liberaUser();
    }
 
-  
+   adm();
    output_low(PIN_B0);
    output_low(PIN_B1);
    output_low(PIN_B2);
@@ -129,16 +150,17 @@ void main()
    zeraTudo(); //2D = '-'
    loadM();
    //Cadastra novo usuário partir do seguinte vetor: Numero cadastro, Status, senha[4];
-   unsigned char nova[] = {'5','1','8','9','8','9'};
+   unsigned char nova[] = {'0','1','8','9','8','9'};
    novoCM(nova);
+   
 //!   
 //!   //Verifica se a senha esta no cadastro, retorna a linha da matriz em que ela se encontra ou o valor 42
 //!   unsigned char senha[] = {'8','9','8','9'};
 //! 
    //
-//!   unsigned char user[] = {'9'};   
-//!   consultaM(cadastradoU(user,dados),dados);
-
+//!   unsigned char user[] = {'5'};   
+//!   consultaM(cadastradoU(user));
+//!   
 
    output_low(PIN_B0);output_low(PIN_B1);output_low(PIN_B2);output_low(PIN_B3);
    set_tris_b(0xF0);
