@@ -18,9 +18,11 @@
     -fx-background-radius: 0;
     -fx-border-color: white;
     -fx-border-width: 1 1 1 1;
+    -fx-font-family: Georgia;
 }
 .button .text{
     -fx-fill: white;
+    -fx-font-family: Georgia;
 }
 
 .button:hover {
@@ -100,4 +102,16 @@
 
 .gradient {
     -fx-background-color: linear-gradient(to top, #1d1d1d, derive(#1d1d1d, 40%));
+}
+
+.text-field {
+    -fx-background-color: derive(#1d1d1d, 60%);
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: white;
+    -fx-font-family: Georgia;
+    -fx-font-size: 12;
+}
+
+.text-field:focused {
+    -fx-background-color: derive(#1d1d1d, 30%);
 }
