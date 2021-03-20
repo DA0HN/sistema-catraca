@@ -50,23 +50,22 @@ int verificaPosicaoNula(){ //verifica se existe posições nulas para cadastro
          return i;
       }
    }
-   return -1;
+   return (-1);
 }
 
 void novoUsuario(unsigned char cadastro[4]){ //cadastras um novo usuario na memoria
     int posicaoLinha = verificaPosicaoNula();
     dados[posicaoLinha][0] = consultaId() + '0'; //id do usuario
     dados[posicaoLinha][1] = '0';    //status
-        if(posicaoLinha != (-1)){
-            for(int i =2;i<6;i++){
+        if(posicaoLinha == (-1)){
+            printf(lcd_escreve, "\fErro!\n\r"); 
+            printf(lcd_escreve, "Memoria Cheia!!"); 
+            delay_ms(2000);          
+        }else{
+             for(int i =2;i<6;i++){
                 dados[posicaoLinha][i] = cadastro[i-2];
             }
-        salvaMemoria();
-        }
-        else{
-         printf(lcd_escreve, "\fErro!\n\r"); 
-         printf(lcd_escreve, "Memoria Cheia!!"); 
-         delay_ms(2000);
+            salvaMemoria();
         }
 }
 
@@ -82,11 +81,12 @@ void excluiUsuario(unsigned char cadastro[4]){ //exclui um usuario da memoria
 }
 
 
-void verificaUsuario(unsigned char cadastro[4]){
+
+int verificaUsuario(unsigned char cadastro[4]){
    if(cadastro[0] == dados[0][1] && cadastro[1] == dados[0][2] && cadastro[2] == dados[0][3] && cadastro[3] == dados[0][4]){
-         printf(lcd_escreve, "\f Bem Vindo Admin "); 
+         printf(lcd_escreve, "\fBem Vindo Admin!"); 
          delay_ms(2000);
-         //chamar funcao para admin
+         return 1;
    }else{
       for(int i = 1; i < LINHA; i++){
          if(dados[i][2] == cadastro[0] && dados[i][3] == cadastro[1] &&  dados[i][4] == cadastro[2] &&  dados[i][5] == cadastro[3]){
@@ -97,6 +97,7 @@ void verificaUsuario(unsigned char cadastro[4]){
             delay_ms(2000);
          }
       }
+      return 0;
    }
 }
 
