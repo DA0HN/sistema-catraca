@@ -90,14 +90,11 @@ int verificaUsuario(unsigned char cadastro[4]){
    }else{
       for(int i = 1; i < LINHA; i++){
          if(dados[i][2] == cadastro[0] && dados[i][3] == cadastro[1] &&  dados[i][4] == cadastro[2] &&  dados[i][5] == cadastro[3]){
-            printf(lcd_escreve, "\f Bem Vindo! "); 
-            delay_ms(2000);
-         }else if(i == (LINHA -1))  {
-            printf(lcd_escreve, "\f Senha invalida!! "); 
-            delay_ms(2000);
+            return 0;
+         }else if (i == (LINHA -1)){
+            return (-1);
          }
-      }
-      return 0;
+      }     
    }
 }
 

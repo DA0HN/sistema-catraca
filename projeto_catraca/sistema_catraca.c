@@ -18,24 +18,6 @@ void RB_isr(void)
    clear_interrupt(INT_RB);
    
     tmp = tc_tecla();
- 
-   /*if(tmp!= 255){
-      if(posicaoSenha == 4){
-         posicaoSenha = 0;
-      }      
-      if(tmp == 'D'){    
-         tipoTela = verificaUsuario(senha);    
-         senha[0] = senha[1] = senha[2] = senha[3] = '\0';
-      }else{
-         senha[posicaoSenha] = tmp;
-         posicaoSenha++;
-      }
-      
-      if(tipoTela == 1){
-         comandoAdmin = tmp - '0';
-      }
-   }*/
-   
    
    if (tipoTela == 0){
       printf(lcd_escreve, "\f Academia C & G\n"); 
@@ -45,13 +27,25 @@ void RB_isr(void)
             posicaoSenha = 0;
          }      
          if(tmp == 'D'){    
-            tipoTela = verificaUsuario(senha);    
+            if(verificaUsuario(senha) == 1){
+               tipoTela = 1;
+            }else if(verificaUsuario(senha) == 0){
+               //liberar catraca com rele
+                output_high(PIN_C0);
+                printf(lcd_escreve, "\f Bem Vindo! ");           
+                delay_ms(4000);
+                output_low(PIN_C0);
+                tipoTela = 0;
+            }else if(verificaUsuario(senha) == (-1)){
+               printf(lcd_escreve, "\f Senha invalida!! "); 
+               delay_ms(2000);
+               tipoTela = 0;
+            }
             senha[0] = senha[1] = senha[2] = senha[3] = '\0';
          }else{
             senha[posicaoSenha] = tmp;
             posicaoSenha++;
-         }                
-            comandoAdmin = tmp - '0';        
+         }                  
       }       
    }else if(tipoTela == 1){
       printf(lcd_escreve, "\f1- Incluir\n\r2- Excluir"); 
