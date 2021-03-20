@@ -26,38 +26,151 @@
 #include "lib/kbd_ext_board2.c"
 #include "lib/funcMemoria.c"
 
-#use rs232(baud=9600, xmit=PIN_C6, rcv=PIN_C7, ERRORS)
+//#use rs232(baud=9600, xmit=PIN_C6, rcv=PIN_C7, Serial)
 
-unsigned char dados[16][5];
+unsigned char tmp;
+int countSs = 0;
+unsigned char senhaDigitada[] = {'-','-','-','-'};
+int modoAdm = 42, senhaAdm = 43;
+void clearD(){
+   countSs = 0;
+   senhaDigitada[0] = senhaDigitada[1] = senhaDigitada[2] = senhaDigitada[3] = '-';
+}
+int msgTela[] = {0,1,0,0};
+void mostraTela(int mostra){
+   if(mostra == 1){
+      if(msgTela[0] == 1){
+         printf(lcd_escreve, "\f ControleEntrada\n"); 
+         printf(lcd_escreve, "\r  Senha: %s", senhaDigitada);
+         msgTela[0] = 0;
+         msgTela[1] = 1;
+         
+      }
+   }else if(mostra == 2){
+      if(msgTela[1] == 1){
+         printf(lcd_escreve, "\f    Academia\n"); 
+         printf(lcd_escreve, "\r Dig sua Senha");
+         msgTela[1] = 0;
+         msgTela[0] = 1;
+      }
+   }else if(mostra == 3){
+      if(msgTela[2] == 1){
+         printf(lcd_escreve, "\f    ADM\n"); 
+         printf(lcd_escreve, "\r Dig sua Senha");
+         msgTela[2] = 0;
+      }
+   }else if(mostra == 4){
+      if(msgTela[3] == 1){
+         printf(lcd_escreve, "\f Bem Vindo ADM\n"); 
+         printf(lcd_escreve, "\r Digite a opcao");
+         msgTela[3] = 0;
+      }
+   }
+}
+int liberaUser(){
+   delay_ms(100);
+   int selecionado = verificaS(senhaDigitada);
+   if(selecionado!=42){
+      printf(lcd_escreve,"\f Liberado!\n");
+      printf(lcd_escreve,"\r Usuario: %c",valorM(selecionado,0));
+      return valorM(selecionado,0);
+   }else{
+      printf(lcd_escreve," \f Desconhecido!\n");
+      printf(lcd_escreve," \r Bloqueado!\n");
+      return 42;
+   }   
+   msgTela[3] = 0;
+   delay_ms(500);
+   clearD();
+}
+void adm(){
+   if(modoAdm == 1 && senhaAdm == cadastradoU('0')){
+      printf(lcd_escreve, "\f Bem Vindo ADM\n"); 
+      printf(lcd_escreve, "\r Digite a opcao");
+      delay_ms(200);
+   }
+}
+#INT_RB
+void RB_isr(void) 
+{
+   disable_interrupts(INT_RB);
+   clear_interrupt(INT_RB);
+   
+    tmp = tc_tecla();
+ 
+   if(tmp!= 255){   
+      if(tmp == '*'){
+         modoAdm = 1;
+         msgTela[2] = 1;
+         mostraTela(3);
+      }else{
+         senhaDigitada[countSs] = tmp;
+         countSs++;
+         delay_ms(50);
+      }
+   }
+   if(msgTela[2] == 1){
+      
+   }else{
+      if(countSs>0){
+         msgTela[0] = 1;
+         mostraTela(1);
+         delay_ms(10);
+      }else{ 
+         mostraTela(2);
+      }
+   }   
+   
+   
+   if(countSs == 4){
+      senhaAdm = liberaUser();
+   }
+
+   adm();
+   output_low(PIN_B0);
+   output_low(PIN_B1);
+   output_low(PIN_B2);
+   output_low(PIN_B3);
+   clear_interrupt(INT_RB);
+   enable_interrupts(INT_RB);
+}
 
 void main()
 {   
    lcd_ini();
    delay_ms(50);
    init_m();
-   
-   loadM(dados);
-//!   saveM(dados);
-//!
-//!   zeraTudo(dados); //2D = '-'
-//!
-//!   unsigned char nova[] = {'0','1','2','6','8','9'};
-//!   novoCM(nova,dados);
-//!
-   unsigned char senha[] = {'2','6','8','9'};
-   int selecionado = verificaS(senha,dados);
-   
-   if(selecionado!=42){
-      printf(lcd_escreve,"\f Liberado!\n");
-      printf(lcd_escreve,"\r Usuario: %c%c",dados[selecionado][0],dados[selecionado][1]);
-   }else{
-      printf(lcd_escreve," \f Bloqueado!\n");
-   } 
-//!
-//!   unsigned char user[] = {'0','1'};   
-//!   printM(cadastradoU(user,dados),dados);
-//!   
+
      
+   //Carrega os arquivos da memoria interna para uma matriz
+//!   loadM();
+   //Salva a matriz na memoria interna
+//!   saveM();
+   //Limpa toda a memoria interna
+   zeraTudo(); //2D = '-'
+   loadM();
+   //Cadastra novo usuário partir do seguinte vetor: Numero cadastro, Status, senha[4];
+   unsigned char nova[] = {'0','1','8','9','8','9'};
+   novoCM(nova);
+   
+//!   
+//!   //Verifica se a senha esta no cadastro, retorna a linha da matriz em que ela se encontra ou o valor 42
+//!   unsigned char senha[] = {'8','9','8','9'};
+//! 
+   //
+//!   unsigned char user[] = {'5'};   
+//!   consultaM(cadastradoU(user));
+//!   
+
+   output_low(PIN_B0);output_low(PIN_B1);output_low(PIN_B2);output_low(PIN_B3);
+   set_tris_b(0xF0);
+   port_B_pullups(true);
+   
+   enable_interrupts(GLOBAL);
+   enable_interrupts(INT_RB);
+   
+  
+   while(true){
+
+   }
 }
-
-

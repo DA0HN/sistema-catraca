@@ -9,6 +9,9 @@
 unsigned char tmp;
 char senha[4];
 int posicaoSenha = 0;
+int tipoTela = 0;
+int comandoAdmin = 0;
+int status = 0;
 
 #INT_RB
 void RB_isr(void) 
@@ -17,25 +20,100 @@ void RB_isr(void)
    clear_interrupt(INT_RB);
    
     tmp = tc_tecla();
- 
-   if(tmp!= 255){
-      if(posicaoSenha == 4){
-         posicaoSenha = 0;
-      }
-      
-      //implementar verifica posições nulas do vetor
-      if(tmp == 'D'){    
-         verificaUsuario(senha);    
-         senha[0] = senha[1] = senha[2] = senha[3] = '\0';
-      }else{
-         senha[posicaoSenha] = tmp;
-         posicaoSenha++;
-      }
-   }
    
-   printf(lcd_escreve, "\f Academia C & G\n"); 
-   printf(lcd_escreve, "\r  Senha: %s", senha); 
-
+   if (tipoTela == 0){
+      printf(lcd_escreve, "\f Academia C & G\n"); 
+      printf(lcd_escreve, "\r  Senha: %s", senha);      
+      if(tmp!= 255){
+         if(posicaoSenha == 4){
+            posicaoSenha = 0;
+         }      
+         if(tmp == 'D'){    
+            if(verificaUsuario(senha) == 1){
+               tipoTela = 1;
+            }else if(verificaUsuario(senha) == 0){              
+               if(status == 0){
+                   output_high(PIN_C0);               
+                   printf(lcd_escreve, "\f   Bem Vindo! "); 
+                   alteraStatus(senha);
+                   delay_ms(3000);
+                   output_low(PIN_C0);
+                   tipoTela = 0;
+                   status = 1;
+               }else if(status == 1){             
+                   output_high(PIN_C0);               
+                   printf(lcd_escreve, "\f  Volte Sempre! "); 
+                   alteraStatus(senha);
+                   delay_ms(3000);
+                   output_low(PIN_C0);
+                   tipoTela = 0;
+                   status = 0;
+               }
+            }else if(verificaUsuario(senha) == (-1)){
+               printf(lcd_escreve, "\f Senha invalida!! "); 
+               delay_ms(2000);
+               tipoTela = 0;
+            }
+            senha[0] = senha[1] = senha[2] = senha[3] = '\0';
+         }else{
+            senha[posicaoSenha] = tmp;
+            posicaoSenha++;
+         }                  
+      }       
+   }else if(tipoTela == 1){
+      printf(lcd_escreve, "\f1- Incluir\n\r2- Excluir"); 
+      if(tmp!= 255){
+         comandoAdmin = tmp - '0';  
+      }      
+      if(comandoAdmin == 1){
+         printf(lcd_escreve, "\f Incluir Pessoa"); 
+         tipoTela = 2;
+         senha[0] = senha[1] = senha[2] = senha[3] = '\0';
+         delay_ms(2000);       
+      }else if(comandoAdmin == 2){
+         printf(lcd_escreve, "\fExcluir Pessoa"); 
+         tipoTela = 3;
+         senha[0] = senha[1] = senha[2] = senha[3] = '\0';
+         delay_ms(2000);     
+      }
+   }else if (tipoTela == 2){
+      printf(lcd_escreve, "\fInf. p/ incluir\n\rSenha: %s", senha);
+      if(tmp!= 255){
+         if(posicaoSenha == 4){
+            posicaoSenha = 0;
+         } 
+         if(tmp == 'A'){
+            novoUsuario(senha);  
+            printf(lcd_escreve, "\f    Cadastro\n\r   Realizado");
+            delay_ms(2000);
+            senha[0] = senha[1] = senha[2] = senha[3] = '\0';
+            tipoTela = 0;
+         }else{
+            senha[posicaoSenha] = tmp;
+            posicaoSenha++;
+         }
+      }
+   }else if (tipoTela == 3){
+    printf(lcd_escreve, "\fInf. p/ excluir\n\rSenha: %s", senha);
+    if(tmp!= 255){
+        if(posicaoSenha == 4){
+            posicaoSenha = 0;
+         } 
+         if(tmp == 'B'){
+            excluiUsuario(senha); 
+            printf(lcd_escreve, "\fExclusao Realizada");
+            delay_ms(2000);
+            senha[0] = senha[1] = senha[2] = senha[3] = '\0';
+            tipoTela = 0;
+         }else{
+            senha[posicaoSenha] = tmp;
+            posicaoSenha++;
+         }
+    }    
+  }
+   
+ 
+   
    clear_interrupt(INT_RB);
    enable_interrupts(INT_RB);
 
@@ -49,7 +127,7 @@ void main()
 {
    
    init_ext_eeprom();
-   //apagaMemoria();
+   apagaMemoria();
    carregaMemoria();
    configuracaoMemoria();
    
