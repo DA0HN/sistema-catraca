@@ -64,4 +64,11 @@ public class ClientRepository implements IClientRepository {
     return this;
   }
 
+  @Override public List<Client> findAll() {
+    var query = manager.createQuery(
+      "SELECT client FROM Client client",
+      Client.class
+    );
+    return query.getResultList();
+  }
 }
