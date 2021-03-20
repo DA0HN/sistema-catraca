@@ -49,9 +49,10 @@ void main()
 {
    
    init_ext_eeprom();
-
-   configuracaoMemoria();
+   //apagaMemoria();
    carregaMemoria();
+   configuracaoMemoria();
+   
    
    lcd_ini();
    delay_ms(10);

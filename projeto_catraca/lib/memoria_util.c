@@ -83,19 +83,19 @@ void excluiUsuario(unsigned char cadastro[4]){ //exclui um usuario da memoria
 
 
 void verificaUsuario(unsigned char cadastro[4]){
-
    if(cadastro[0] == dados[0][1] && cadastro[1] == dados[0][2] && cadastro[2] == dados[0][3] && cadastro[3] == dados[0][4]){
          printf(lcd_escreve, "\f Bem Vindo Admin "); 
          delay_ms(2000);
          //chamar funcao para admin
-   }
-   for(int i = 1; i < LINHA; i++){
-      if(dados[i][2] == cadastro[0] && dados[i][3] == cadastro[1] &&  dados[i][4] == cadastro[2] &&  dados[i][5] == cadastro[3]){
-         printf(lcd_escreve, "\f Bem Vindo! "); 
-         delay_ms(2000);
-      }else if(i == (LINHA -1))  {
-         printf(lcd_escreve, "\f Senha invalida!! "); 
-         delay_ms(2000);
+   }else{
+      for(int i = 1; i < LINHA; i++){
+         if(dados[i][2] == cadastro[0] && dados[i][3] == cadastro[1] &&  dados[i][4] == cadastro[2] &&  dados[i][5] == cadastro[3]){
+            printf(lcd_escreve, "\f Bem Vindo! "); 
+            delay_ms(2000);
+         }else if(i == (LINHA -1))  {
+            printf(lcd_escreve, "\f Senha invalida!! "); 
+            delay_ms(2000);
+         }
       }
    }
 }
@@ -104,5 +104,6 @@ void configuracaoMemoria(){// configurações inicias da memoria
       if(dados[0][0] == memoriaNull){
          dados[0][0] = '1';
          dados[0][1] = '0';dados[0][2] = '0';dados[0][3] = '0';dados[0][4] = '0';//senha do admin
+         salvaMemoria();
       }   
 }
