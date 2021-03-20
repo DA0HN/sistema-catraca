@@ -12,8 +12,55 @@ int posicaoSenha = 0;
 int tipoTela = 0;
 int comandoAdmin = 0;
 
+void telaStatus();
+
 void limpaSenha(){
    senha[0] = senha[1] = senha[2] = senha[3] = '\0';
+}
+
+
+void telaPrincipal(){
+      printf(lcd_escreve, "\f Academia C & G\n"); 
+      printf(lcd_escreve, "\r  Senha: %s", senha);  
+      
+      if(tmp == 255) return;
+      
+      if(posicaoSenha == 4){
+         posicaoSenha = 0;
+      }  
+      
+      if(tmp == 'D'){  
+         int usuario = verificaUsuario(senha);
+         if(usuario == 0) {           
+            telaStatus();
+            tipoTela = 0;
+         }else if(usuario == 1){
+            tipoTela = 1;
+         }else{
+            printf(lcd_escreve, "\f Senha invalida!! "); 
+            delay_ms(2000);
+            tipoTela = 0;
+         }
+     
+         limpaSenha();            
+      }else{
+         senha[posicaoSenha] = tmp;
+         posicaoSenha++;
+      }                  
+      
+}
+
+void telaStatus(){
+   output_high(PIN_C0);
+   if(status(senha) == 0){
+      printf(lcd_escreve, "\f   Bem Vindo! ");    
+   }else{
+      printf(lcd_escreve,  "\f  Volte Sempre! ");    
+   }
+   
+   alteraStatus(senha);
+   delay_ms(2000);
+   output_low(PIN_C0);  
 }
 
 #INT_RB
@@ -25,37 +72,7 @@ void RB_isr(void)
     tmp = tc_tecla();
    
    if (tipoTela == 0){
-      printf(lcd_escreve, "\f Academia C & G\n"); 
-      printf(lcd_escreve, "\r  Senha: %s", senha);      
-      if(tmp!= 255){
-         if(posicaoSenha == 4){
-            posicaoSenha = 0;
-         }      
-         if(tmp == 'D'){            
-            switch(verificaUsuario(senha))  {           
-            case 0:
-               printf(lcd_escreve, status(senha) == 0 ? "\f   Bem Vindo! " : "\f  Volte Sempre! ");  
-               output_high(PIN_C0); 
-               alteraStatus(senha);
-               delay_ms(2000);
-               output_low(PIN_C0);
-               tipoTela = 0;
-               break;
-            case 1:
-               tipoTela = 1;
-               break;          
-            default:
-               printf(lcd_escreve, "\f Senha invalida!! "); 
-               delay_ms(2000);
-               tipoTela = 0;
-               break;
-            }
-            limpaSenha();            
-         }else{
-            senha[posicaoSenha] = tmp;
-            posicaoSenha++;
-         }                  
-      }       
+       telaPrincipal();      
    }else if(tipoTela == 1){
       printf(lcd_escreve, "\f1- Incluir\n\r2- Excluir"); 
       if(tmp!= 255){
@@ -141,7 +158,6 @@ void main()
    enable_interrupts(GLOBAL);
    output_low(PIN_B0);output_low(PIN_B1);output_low(PIN_B2);output_low(PIN_B3);
   
-
    while(TRUE){        
    }
 }
