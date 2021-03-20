@@ -11,6 +11,8 @@ char senha[4];
 int posicaoSenha = 0;
 int tipoTela = 0;
 int comandoAdmin = 0;
+int status = 0;
+
 #INT_RB
 void RB_isr(void) 
 {
@@ -29,13 +31,24 @@ void RB_isr(void)
          if(tmp == 'D'){    
             if(verificaUsuario(senha) == 1){
                tipoTela = 1;
-            }else if(verificaUsuario(senha) == 0){
-               //liberar catraca com rele
-                output_high(PIN_C0);
-                printf(lcd_escreve, "\f Bem Vindo! ");           
-                delay_ms(4000);
-                output_low(PIN_C0);
-                tipoTela = 0;
+            }else if(verificaUsuario(senha) == 0){              
+               if(status == 0){
+                   output_high(PIN_C0);               
+                   printf(lcd_escreve, "\f   Bem Vindo! "); 
+                   alteraStatus(senha);
+                   delay_ms(3000);
+                   output_low(PIN_C0);
+                   tipoTela = 0;
+                   status = 1;
+               }else if(status == 1){             
+                   output_high(PIN_C0);               
+                   printf(lcd_escreve, "\f  Volte Sempre! "); 
+                   alteraStatus(senha);
+                   delay_ms(3000);
+                   output_low(PIN_C0);
+                   tipoTela = 0;
+                   status = 0;
+               }
             }else if(verificaUsuario(senha) == (-1)){
                printf(lcd_escreve, "\f Senha invalida!! "); 
                delay_ms(2000);
@@ -71,7 +84,7 @@ void RB_isr(void)
          } 
          if(tmp == 'A'){
             novoUsuario(senha);  
-            printf(lcd_escreve, "\fCadastro Realizado");
+            printf(lcd_escreve, "\f    Cadastro\n\r   Realizado");
             delay_ms(2000);
             senha[0] = senha[1] = senha[2] = senha[3] = '\0';
             tipoTela = 0;

@@ -105,3 +105,17 @@ void configuracaoMemoria(){// configurações inicias da memoria
          salvaMemoria();
       }   
 }
+
+void alteraStatus(unsigned char cadastro[4]){
+      for(int i = 1; i < LINHA; i++){
+         if(dados[i][2] == cadastro[0] && dados[i][3] == cadastro[1] &&  dados[i][4] == cadastro[2] && dados[i][5] == cadastro[3]){  
+         
+            if(dados[i][1] == '0'){
+               dados[i][1] = 1 + '0';
+            }else if(dados[i][1] == '1'){
+                dados[i][1] = 0 + '0';
+            }              
+         }
+    } 
+    salvaMemoria();
+}
