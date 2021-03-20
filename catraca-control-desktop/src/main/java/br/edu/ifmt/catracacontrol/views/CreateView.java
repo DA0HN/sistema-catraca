@@ -7,17 +7,16 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 
 public class CreateView extends Application {
 
   @Override public void start(Stage stage) throws Exception {
     try {
-      var view = new FXMLLoader();
-      Parent parent = view.load(new FileInputStream("src/main/resources/views/create.fxml"));
+      var loader = new FXMLLoader();
+      Parent parent = loader.load(getClass().getResourceAsStream("/views/create.fxml"));
       parent.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
-      CreateController controller = view.getController();
+      CreateController controller = loader.getController();
       controller.setStage(stage);
       stage.setScene(new Scene(parent));
       stage.setTitle("Adicionar novo cliente");

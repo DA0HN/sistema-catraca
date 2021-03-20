@@ -16,7 +16,7 @@ public class HomeView extends Application {
   @Override public void start(Stage stage) throws Exception {
     try {
       var view = new FXMLLoader();
-      Parent parent = view.load(new FileInputStream("src/main/resources/views/home.fxml"));
+      Parent parent = view.load(getClass().getResourceAsStream("/views/home.fxml"));
       parent.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
       HomeController controller = view.getController();
       controller.setStage(stage);
