@@ -6,39 +6,51 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane blendMode="DARKEN" prefHeight="340.0" prefWidth="480.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.edu.ifmt.catracacontrol.controllers.HomeController">
+<AnchorPane blendMode="DARKEN" prefHeight="340.0" prefWidth="480.0"
+            stylesheets="@../css/style.css"  xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="br.edu.ifmt.catracacontrol.controllers.HomeController">
     <children>
-        <Text fill="WHITE" fontSmoothingType="LCD" layoutX="126.0" layoutY="68.0" stroke="#ff1a1a" strokeLineCap="ROUND" strokeLineJoin="BEVEL" strokeType="OUTSIDE" strokeWidth="0.0" text="[ CATRACA $ISTEM ]" AnchorPane.bottomAnchor="330.5546875" AnchorPane.topAnchor="45.0">
+        <Text fill="WHITE" fontSmoothingType="LCD" layoutX="126.0" layoutY="68.0" stroke="#ff1a1a"
+              strokeLineCap="ROUND" strokeLineJoin="BEVEL" strokeType="OUTSIDE" strokeWidth="0.0"
+              text="[ CATRACA $ISTEM ]" AnchorPane.bottomAnchor="330.5546875"
+              AnchorPane.topAnchor="45.0">
             <font>
-                <Font name="Sylfaen" size="24.0" />
+                <Font name="Sylfaen" size="24.0"/>
             </font>
         </Text>
-        <Button fx:id="viewClientButton" layoutX="170.0" layoutY="203.0" mnemonicParsing="false" onMouseClicked="#viewClientButtonOnClick" prefHeight="42.0" prefWidth="140.0" stylesheets="@../css/style.css" text="consultar clientes" textOverrun="CLIP">
+        <Button fx:id="viewClientButton" layoutX="170.0" layoutY="203.0" mnemonicParsing="false"
+                onMouseClicked="#viewClientButtonOnClick" prefHeight="42.0" prefWidth="140.0"
+                stylesheets="@../css/style.css" text="consultar clientes" textOverrun="CLIP">
             <font>
-                <Font name="Georgia" size="12.0" />
+                <Font name="Georgia" size="12.0"/>
             </font>
             <styleClass>
-                <String fx:value="table-view" />
-                <String fx:value="button" />
+                <String fx:value="table-view"/>
+                <String fx:value="button"/>
             </styleClass>
         </Button>
-        <Button fx:id="createClientButton" layoutX="170.0" layoutY="122.0" mnemonicParsing="false" onMouseClicked="#createClientButtonOnClick" prefHeight="42.0" prefWidth="140.0" stylesheets="@../css/style.css" text="adicionar cliente">
+        <Button fx:id="createClientButton" layoutX="170.0" layoutY="122.0" mnemonicParsing="false"
+                onMouseClicked="#createClientButtonOnClick" prefHeight="42.0" prefWidth="140.0"
+                stylesheets="@../css/style.css" text="adicionar cliente">
             <font>
-                <Font name="Georgia" size="12.0" />
+                <Font name="Georgia" size="12.0"/>
             </font>
             <styleClass>
-                <String fx:value="table-view" />
-                <String fx:value="button" />
+                <String fx:value="table-view"/>
+                <String fx:value="button"/>
             </styleClass>
         </Button>
-        <Text fill="WHITE" fontSmoothingType="LCD" layoutX="124.0" layoutY="387.0" smooth="false" strokeType="OUTSIDE" strokeWidth="0.0" text="Desenvolvido por: Gabriel Honda &amp; Carlos Henrique" AnchorPane.bottomAnchor="15.0" AnchorPane.topAnchor="375.0">
+        <Text fill="WHITE" fontSmoothingType="LCD" layoutX="124.0" layoutY="387.0" smooth="false"
+              strokeType="OUTSIDE" strokeWidth="0.0"
+              text="Desenvolvido por: Gabriel Honda &amp; Carlos Henrique"
+              AnchorPane.bottomAnchor="15.0" AnchorPane.topAnchor="375.0">
             <font>
-                <Font name="Ink Free" size="11.0" />
+                <Font name="Ink Free" size="11.0"/>
             </font>
         </Text>
     </children>
-   <styleClass>
-      <String fx:value="background" />
-      <String fx:value="gradient" />
-   </styleClass>
+    <styleClass>
+        <String fx:value="background"/>
+        <String fx:value="gradient"/>
+    </styleClass>
 </AnchorPane>
