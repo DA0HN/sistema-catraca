@@ -12,6 +12,7 @@ public interface IClientRepository {
   void commit();
   void undo();
 
+  List<Client> findAll();
   Client findById(Long id);
   Client isClientRegistered(String password);
 }
