@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.FileInputStream;
@@ -16,11 +17,15 @@ public class HomeView extends Application {
     try {
       var view = new FXMLLoader();
       Parent parent = view.load(new FileInputStream("src/main/resources/views/home.fxml"));
+      parent.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
       HomeController controller = view.getController();
       controller.setStage(stage);
       stage.setScene(new Scene(parent));
       stage.setTitle("CATRACA $ISTEM");
       stage.setResizable(false);
+      stage.getIcons().add(
+        new Image(this.getClass().getResourceAsStream("/images/ticket_gate.png"))
+      );
       stage.show();
     }
     catch(IOException e) {
