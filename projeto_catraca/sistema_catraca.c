@@ -11,7 +11,10 @@ char senha[4];
 int posicaoSenha = 0;
 int tipoTela = 0;
 int comandoAdmin = 0;
-int status = 0;
+
+void limpaSenha(){
+   senha[0] = senha[1] = senha[2] = senha[3] = '\0';
+}
 
 #INT_RB
 void RB_isr(void) 
@@ -28,33 +31,26 @@ void RB_isr(void)
          if(posicaoSenha == 4){
             posicaoSenha = 0;
          }      
-         if(tmp == 'D'){    
-            if(verificaUsuario(senha) == 1){
+         if(tmp == 'D'){            
+            switch(verificaUsuario(senha))  {           
+            case 0:
+               printf(lcd_escreve, status(senha) == 0 ? "\f   Bem Vindo! " : "\f  Volte Sempre! ");  
+               output_high(PIN_C0); 
+               alteraStatus(senha);
+               delay_ms(2000);
+               output_low(PIN_C0);
+               tipoTela = 0;
+               break;
+            case 1:
                tipoTela = 1;
-            }else if(verificaUsuario(senha) == 0){              
-               if(status == 0){
-                   output_high(PIN_C0);               
-                   printf(lcd_escreve, "\f   Bem Vindo! "); 
-                   alteraStatus(senha);
-                   delay_ms(3000);
-                   output_low(PIN_C0);
-                   tipoTela = 0;
-                   status = 1;
-               }else if(status == 1){             
-                   output_high(PIN_C0);               
-                   printf(lcd_escreve, "\f  Volte Sempre! "); 
-                   alteraStatus(senha);
-                   delay_ms(3000);
-                   output_low(PIN_C0);
-                   tipoTela = 0;
-                   status = 0;
-               }
-            }else if(verificaUsuario(senha) == (-1)){
+               break;          
+            default:
                printf(lcd_escreve, "\f Senha invalida!! "); 
                delay_ms(2000);
                tipoTela = 0;
+               break;
             }
-            senha[0] = senha[1] = senha[2] = senha[3] = '\0';
+            limpaSenha();            
          }else{
             senha[posicaoSenha] = tmp;
             posicaoSenha++;
@@ -68,25 +64,26 @@ void RB_isr(void)
       if(comandoAdmin == 1){
          printf(lcd_escreve, "\f Incluir Pessoa"); 
          tipoTela = 2;
-         senha[0] = senha[1] = senha[2] = senha[3] = '\0';
-         delay_ms(2000);       
+         limpaSenha();
+         delay_ms(2000);          
       }else if(comandoAdmin == 2){
          printf(lcd_escreve, "\fExcluir Pessoa"); 
          tipoTela = 3;
-         senha[0] = senha[1] = senha[2] = senha[3] = '\0';
-         delay_ms(2000);     
+         limpaSenha();
+         delay_ms(2000);           
       }
+       comandoAdmin = 0;
    }else if (tipoTela == 2){
       printf(lcd_escreve, "\fInf. p/ incluir\n\rSenha: %s", senha);
       if(tmp!= 255){
          if(posicaoSenha == 4){
             posicaoSenha = 0;
          } 
-         if(tmp == 'A'){
+         if(tmp == 'D'){
             novoUsuario(senha);  
             printf(lcd_escreve, "\f    Cadastro\n\r   Realizado");
             delay_ms(2000);
-            senha[0] = senha[1] = senha[2] = senha[3] = '\0';
+            limpaSenha();
             tipoTela = 0;
          }else{
             senha[posicaoSenha] = tmp;
@@ -99,11 +96,11 @@ void RB_isr(void)
         if(posicaoSenha == 4){
             posicaoSenha = 0;
          } 
-         if(tmp == 'B'){
+         if(tmp == 'D'){
             excluiUsuario(senha); 
             printf(lcd_escreve, "\fExclusao Realizada");
             delay_ms(2000);
-            senha[0] = senha[1] = senha[2] = senha[3] = '\0';
+            limpaSenha();
             tipoTela = 0;
          }else{
             senha[posicaoSenha] = tmp;
@@ -127,9 +124,9 @@ void main()
 {
    
    init_ext_eeprom();
-   apagaMemoria();
+   //apagaMemoria();
    carregaMemoria();
-   configuracaoMemoria();
+   //configuracaoMemoria();
    
    
    lcd_ini();
@@ -145,8 +142,6 @@ void main()
    output_low(PIN_B0);output_low(PIN_B1);output_low(PIN_B2);output_low(PIN_B3);
   
 
-   while(TRUE){  
-      
-   
+   while(TRUE){        
    }
 }
