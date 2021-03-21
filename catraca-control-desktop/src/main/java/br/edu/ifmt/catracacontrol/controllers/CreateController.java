@@ -1,5 +1,10 @@
 package br.edu.ifmt.catracacontrol.controllers;
 
+import br.edu.ifmt.catracacontrol.domain.models.Client;
+import br.edu.ifmt.catracacontrol.domain.models.Status;
+import br.edu.ifmt.catracacontrol.domain.services.ClientService;
+import br.edu.ifmt.catracacontrol.domain.services.IClientService;
+import br.edu.ifmt.catracacontrol.domain.services.ServiceException;
 import br.edu.ifmt.catracacontrol.views.HomeView;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
@@ -9,23 +14,20 @@ import com.jfoenix.validation.base.ValidatorBase;
 import de.jensd.fx.glyphs.GlyphsBuilder;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
-import javafx.beans.InvalidationListener;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextFormatter;
 import javafx.scene.control.TextInputControl;
-import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
+import javax.swing.*;
 import java.net.URL;
+import java.util.Collection;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static java.util.Arrays.asList;
 
 
 public class CreateController implements Initializable {
@@ -49,6 +51,16 @@ public class CreateController implements Initializable {
   @FXML
   private JFXPasswordField confirmPasswordTextField;
 
+  private IClientService service;
+
+  public CreateController(IClientService service) {
+    this.service = service;
+  }
+
+  public CreateController() {
+    this.service = new ClientService();
+  }
+
   @FXML void backButtonOnClicked(MouseEvent event) throws Exception {
     returnToHome();
   }
@@ -66,12 +78,33 @@ public class CreateController implements Initializable {
       createButton.setDisable(true);
       return;
     }
+    var client = new Client();
+    client.setName(name);
+    client.setPassword(password);
+    client.setStatus(Status.FORA);
 
-    System.out.println("Nome: " + name);
-    System.out.println("Senha: " + password);
-    System.out.println("Confirmação: " + confirmPassword);
-
-    //    returnToHome();
+    try {
+      service.save(client);
+      JOptionPane.showMessageDialog(
+        new JFrame(),
+        "Cliente registrado com sucesso!",
+        "Aviso",
+        JOptionPane.INFORMATION_MESSAGE
+      );
+      returnToHome();
+    }
+    catch(ServiceException e) {
+      JOptionPane.showMessageDialog(
+        new JFrame(),
+        e.getMessage(),
+        "ERRO",
+        JOptionPane.ERROR_MESSAGE
+      );
+      nameTextField.clear();
+      passwordTextField.clear();
+      confirmPasswordTextField.clear();
+      createButton.setDisable(true);
+    }
   }
 
   private void returnToHome() throws Exception {
@@ -87,29 +120,16 @@ public class CreateController implements Initializable {
   }
 
   private void setupValidatorConfirmPassword() {
-    var validator = new RequiredFieldValidator();
-    validator.setMessage("Confirme a senha!");
-    setWarnIcon(validator);
-    var numberValidator = new NumberValidator();
-    setWarnIcon(numberValidator);
-    numberValidator.setMessage("Apenas números!");
-
-    var customValidator = new ValidatorBase("Senhas diferentes") {
-      @Override protected void eval() {
-        TextInputControl textField = (TextInputControl) srcControl.get();
-        hasErrors.set(!textField.getText().equals(passwordTextField.getText()));
+    confirmPasswordTextField.getValidators().addAll(defaultPasswordValidators(passwordTextField));
+    confirmPasswordTextField.focusedProperty().addListener((o, oldVal, newVal) -> {
+      if(!newVal) {
+        createButton.setDisable(!confirmPasswordTextField.validate());
       }
-    };
-    setWarnIcon(customValidator);
-
-    confirmPasswordTextField.getValidators().addAll(numberValidator, validator, customValidator);
-    confirmPasswordTextField.focusedProperty()
-      .addListener((o, oldVal, newVal) -> {
-        if(!newVal) {
-          createButton.setDisable(!confirmPasswordTextField.validate());
-        }
-      });
+    });
     confirmPasswordTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+      if(newValue.length() > 4) {
+        confirmPasswordTextField.deletePreviousChar();
+      }
       if(!oldValue.equals(newValue)) {
         passwordTextField.resetValidation();
         createButton.setDisable(!confirmPasswordTextField.validate());
@@ -117,33 +137,40 @@ public class CreateController implements Initializable {
     });
   }
 
-  private void setupValidatorPassword() {
+  private Collection<? extends ValidatorBase> defaultPasswordValidators(JFXPasswordField fieldToCompare) {
     var validator = new RequiredFieldValidator();
     validator.setMessage("Senha necessária!");
     setWarnIcon(validator);
     var numberValidator = new NumberValidator();
     setWarnIcon(numberValidator);
     numberValidator.setMessage("Apenas números!");
-    var passwordValidator = new ValidatorBase("Senhas diferentes") {
+    var equalityPasswordValidator = new ValidatorBase("Senhas diferentes") {
       @Override protected void eval() {
         TextInputControl textField = (TextInputControl) srcControl.get();
-        hasErrors.set(!textField.getText().equals(confirmPasswordTextField.getText()));
+        hasErrors.set(!textField.getText().equals(fieldToCompare.getText()));
       }
     };
-    setWarnIcon(passwordValidator);
-    passwordTextField.getValidators().addAll(validator, numberValidator, passwordValidator);
+    setWarnIcon(equalityPasswordValidator);
+    return asList(validator, numberValidator, equalityPasswordValidator);
+  }
+
+  private void setupValidatorPassword() {
+    passwordTextField.getValidators().addAll(defaultPasswordValidators(confirmPasswordTextField));
+
     passwordTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+      if(newValue.length() > 4) {
+        passwordTextField.deletePreviousChar();
+      }
       if(!oldValue.equals(newValue)) {
         createButton.setDisable(!passwordTextField.validate());
         confirmPasswordTextField.resetValidation();
       }
     });
-    passwordTextField.focusedProperty()
-      .addListener((o, oldVal, newVal) -> {
-        if(!newVal) {
-          createButton.setDisable(!passwordTextField.validate());
-        }
-      });
+    passwordTextField.focusedProperty().addListener((o, oldVal, newVal) -> {
+      if(!newVal) {
+        createButton.setDisable(!passwordTextField.validate());
+      }
+    });
   }
 
   private void setWarnIcon(ValidatorBase validator) {
@@ -159,6 +186,9 @@ public class CreateController implements Initializable {
     validator.setMessage("Nome é necessário!");
     setWarnIcon(validator);
     nameTextField.getValidators().add(validator);
+    nameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+      if(!oldValue.equals(newValue)) createButton.setDisable(!nameTextField.validate());
+    });
     nameTextField.focusedProperty()
       .addListener((observable, oldValue, newValue) -> {
         if(!newValue) {

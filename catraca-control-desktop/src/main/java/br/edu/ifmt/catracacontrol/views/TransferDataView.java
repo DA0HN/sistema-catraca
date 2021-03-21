@@ -1,6 +1,6 @@
 package br.edu.ifmt.catracacontrol.views;
 
-import br.edu.ifmt.catracacontrol.controllers.HomeController;
+import br.edu.ifmt.catracacontrol.controllers.TransferDataController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,14 +10,13 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class HomeView extends Application {
-
+public class TransferDataView extends Application {
   @Override public void start(Stage stage) throws Exception {
     try {
       var view = new FXMLLoader();
-      Parent parent = view.load(getClass().getResourceAsStream("/views/home.fxml"));
+      Parent parent = view.load(getClass().getResourceAsStream("/views/transfer_data.fxml"));
       parent.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
-      HomeController controller = view.getController();
+      TransferDataController controller = view.getController();
       controller.setStage(stage);
       stage.setScene(new Scene(parent));
       stage.setTitle("CATRACA $YSTEM");

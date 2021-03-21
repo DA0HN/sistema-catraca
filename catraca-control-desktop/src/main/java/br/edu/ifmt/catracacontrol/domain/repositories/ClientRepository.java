@@ -3,6 +3,7 @@ package br.edu.ifmt.catracacontrol.domain.repositories;
 import br.edu.ifmt.catracacontrol.domain.models.Client;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import java.util.List;
 
 public class ClientRepository implements IClientRepository {
@@ -35,13 +36,19 @@ public class ClientRepository implements IClientRepository {
     return query.getSingleResult();
   }
 
-  @Override public Client isClientRegistered(String password) {
-    var query = manager.createQuery(
-      "SELECT client FROM Client client WHERE client.password = :password",
-      Client.class
-    );
-    query.setParameter("password", password);
-    return query.getSingleResult();
+  @Override public Boolean isClientRegistered(String password) {
+    try {
+      var query = manager.createQuery(
+        "SELECT client FROM Client client WHERE client.password = :password",
+        Client.class
+      );
+      query.setParameter("password", password);
+      var result = query.getSingleResult();
+      return result != null;
+    }
+    catch(NoResultException e) {
+      return false;
+    }
   }
 
   private void internalSave(Client client) {

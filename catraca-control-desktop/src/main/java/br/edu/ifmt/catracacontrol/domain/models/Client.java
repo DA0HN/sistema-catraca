@@ -18,11 +18,11 @@ import javax.persistence.Table;
 public class Client {
 
   @Id
-  @Column(name = "ID", nullable = false)
+  @Column(name = "ID")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(name = "NAME", nullable = false)
+  @Column(name = "NAME", nullable = true)
   private String name;
 
   @Column(name = "PASSWORD", length = 4)

@@ -14,5 +14,5 @@ public interface IClientRepository {
 
   List<Client> findAll();
   Client findById(Long id);
-  Client isClientRegistered(String password);
+  Boolean isClientRegistered(String password);
 }
