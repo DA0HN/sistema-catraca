@@ -1,6 +1,7 @@
 package br.edu.ifmt.catracacontrol.domain.services.serialcommunication;
 
 import br.edu.ifmt.catracacontrol.domain.services.Console;
+import br.edu.ifmt.catracacontrol.domain.services.IClientService;
 import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortEvent;
 import com.fazecast.jSerialComm.SerialPortMessageListener;
@@ -10,9 +11,11 @@ public class MessageListener implements SerialPortMessageListener {
 
   @Getter
   private final Console console;
+  private final IClientService service;
 
-  public MessageListener(Console console) {
+  public MessageListener(Console console, IClientService service) {
     this.console = console;
+    this.service = service;
   }
 
   @Override
@@ -22,7 +25,7 @@ public class MessageListener implements SerialPortMessageListener {
 
   @Override
   public byte[] getMessageDelimiter() {
-    return new byte[]{0x0A, 0x0D};
+    return new byte[]{0x0A, 0x0D};    // \n\r
   }
 
   @Override
@@ -33,6 +36,6 @@ public class MessageListener implements SerialPortMessageListener {
   @Override
   public void serialEvent(SerialPortEvent event) {
     byte[] delimitedMessage = event.getReceivedData();
-    System.out.println("Received the following delimited message: " + new String(delimitedMessage));
+    console.getWriter().println("Chegou a mensagem: " + new String(delimitedMessage));
   }
 }
