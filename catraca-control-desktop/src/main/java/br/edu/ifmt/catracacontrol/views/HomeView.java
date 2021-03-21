@@ -8,7 +8,6 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 
 public class HomeView extends Application {
@@ -21,7 +20,7 @@ public class HomeView extends Application {
       HomeController controller = view.getController();
       controller.setStage(stage);
       stage.setScene(new Scene(parent));
-      stage.setTitle("CATRACA $ISTEM");
+      stage.setTitle("CATRACA $YSTEM");
       stage.setResizable(false);
       stage.getIcons().add(
         new Image(this.getClass().getResourceAsStream("/images/ticket_gate.png"))
