@@ -184,3 +184,15 @@ void enviaDados(){
       fprintf(PORT1, "\n\r"); 
     }
 }
+
+void recebeDados(){
+   
+  for (int i = 0; i < LINHA; i++)
+    {
+       for (int J = 0; J < COLUNA; J++)
+       {
+           gets(dados[i][j]);
+       }
+     }
+     salvaMemoria();
+}
