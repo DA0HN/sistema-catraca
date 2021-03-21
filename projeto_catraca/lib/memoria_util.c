@@ -171,3 +171,16 @@ int status(unsigned char cadastro[4])
    }
    return -1;
 }
+
+void enviaDados(){
+   for(int i = 0; i < LINHA; i++){
+      for(int j = 0; j < COLUNA; j++){
+         if(j == 5){
+            fprintf(PORT1, "%d", dados[i][j] - '0');  
+         }else{       
+            fprintf(PORT1, "%d,", dados[i][j] - '0');             
+         }
+      }
+      fprintf(PORT1, "\n\r"); 
+    }
+}

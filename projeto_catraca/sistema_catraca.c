@@ -95,8 +95,9 @@ void telaCrudAdmin()
    }
    else if (comandoAdmin == 4)
    {
-      printf(lcd_escreve, "\fAtualiza Memoria");
-      tipoTela = 5;
+      printf(lcd_escreve, "\f Enviando Dados\n\rPara Computador");
+      enviaDados();
+      tipoTela = 0;
    }
    limpaSenha();
    delay_ms(2000);
@@ -176,33 +177,6 @@ void telaVerificar()
    }
 }
 
-void telaAtualizaDados()
-{
-   /*
-   printf(lcd_escreve, "\fInf. p/ verificar\n\rSenha: %s", senha);
-   if (tmp == 255)
-      return;
-   if (posicaoSenha == 4)
-   {
-      posicaoSenha = 0;
-   }
-   if (tmp == 'D')
-   {
-      if(verificaUsuario(senha) == 0){
-         printf(lcd_escreve, "\fUsuario Valido");
-      }else{
-         printf(lcd_escreve, "\fUsuario Invalido");
-      }
-      delay_ms(2000);
-      limpaSenha();
-      tipoTela = 0;
-   }
-   else
-   {
-      senha[posicaoSenha++] = tmp;
-   }*/
-}
-
 #INT_RB
 void RB_isr(void)
 {
@@ -229,10 +203,6 @@ void RB_isr(void)
    else if (tipoTela == 4)
    {
       telaVerificar();
-   }
-   else if (tipoTela == 5)
-   {
-      telaAtualizaDados();
    }
 
    clear_interrupt(INT_RB);
