@@ -7,6 +7,8 @@ import com.fazecast.jSerialComm.SerialPortEvent;
 import com.fazecast.jSerialComm.SerialPortMessageListener;
 import lombok.Getter;
 
+import java.io.IOException;
+
 public class MessageListener implements SerialPortMessageListener {
 
   @Getter
@@ -35,7 +37,13 @@ public class MessageListener implements SerialPortMessageListener {
 
   @Override
   public void serialEvent(SerialPortEvent event) {
-    byte[] delimitedMessage = event.getReceivedData();
-    console.getWriter().println("Chegou a mensagem: " + new String(delimitedMessage));
+    try {
+      byte[] delimitedMessage = event.getReceivedData();
+      console.getWriter().println("Chegou a mensagem: " + new String(delimitedMessage));
+      console.flush();
+    }
+    catch(IOException e) {
+      e.printStackTrace();
+    }
   }
 }
