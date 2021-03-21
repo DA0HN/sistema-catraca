@@ -213,6 +213,14 @@ void RB_isr(void)
    output_low(PIN_B3);
 }
 
+#INT_RDA
+void  recebe_serial(void) 
+{
+     recebeDados();   
+     printf(lcd_escreve, "\fRecebendo Dados\n\r  Aguarde!");
+     delay_ms(2000);
+}
+
 void main()
 {
 
@@ -231,6 +239,7 @@ void main()
    port_B_pullups(true);
    enable_interrupts(INT_RB);
    enable_interrupts(GLOBAL);
+   enable_interrupts(INT_RDA);
    output_low(PIN_B0);
    output_low(PIN_B1);
    output_low(PIN_B2);
