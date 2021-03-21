@@ -1,6 +1,5 @@
 package br.edu.ifmt.catracacontrol.views;
 
-import br.edu.ifmt.catracacontrol.controllers.HomeController;
 import br.edu.ifmt.catracacontrol.controllers.TransferDataController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
