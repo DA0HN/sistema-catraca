@@ -1,5 +1,8 @@
 package br.edu.ifmt.catracacontrol.controllers;
 
+import br.edu.ifmt.catracacontrol.domain.services.Console;
+import com.jfoenix.controls.JFXTextArea;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.stage.Stage;
 
@@ -10,11 +13,15 @@ public class TransferDataController implements Initializable {
 
   private Stage stage;
 
-  @Override public void initialize(URL location, ResourceBundle resources) {
+  @FXML
+  private JFXTextArea outputTextArea;
 
+  @Override public void initialize(URL location, ResourceBundle resources) {
+    var console = new Console(outputTextArea);
   }
 
   public void setStage(Stage stage) {
     this.stage = stage;
   }
+
 }
