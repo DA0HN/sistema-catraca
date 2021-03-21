@@ -12,7 +12,18 @@ int posicaoSenha = 0;
 int tipoTela = 0;
 int comandoAdmin = 0;
 
-void telaStatus();
+void telaStatus(){ 
+   if(status(senha) == 0){
+      printf(lcd_escreve, "\f   Bem Vindo! ");    
+   }else{
+      printf(lcd_escreve,  "\f  Volte Sempre! ");    
+   }
+   output_high(PIN_C0);
+   alteraStatus(senha);
+   delay_ms(2000);
+   output_low(PIN_C0);  
+}
+
 
 void limpaSenha(){
    senha[0] = senha[1] = senha[2] = senha[3] = '\0';
@@ -44,55 +55,30 @@ void telaPrincipal(){
      
          limpaSenha();            
       }else{
-         senha[posicaoSenha] = tmp;
-         posicaoSenha++;
+         senha[posicaoSenha++] = tmp;
       }                  
       
 }
 
-void telaStatus(){
-   output_high(PIN_C0);
-   if(status(senha) == 0){
-      printf(lcd_escreve, "\f   Bem Vindo! ");    
-   }else{
-      printf(lcd_escreve,  "\f  Volte Sempre! ");    
-   }
-   
-   alteraStatus(senha);
-   delay_ms(2000);
-   output_low(PIN_C0);  
-}
-
-#INT_RB
-void RB_isr(void) 
-{
-   disable_interrupts(INT_RB);
-   clear_interrupt(INT_RB);
-   
-    tmp = tc_tecla();
-   
-   if (tipoTela == 0){
-       telaPrincipal();      
-   }else if(tipoTela == 1){
+void telaCrudAdmin(){
       printf(lcd_escreve, "\f1- Incluir\n\r2- Excluir"); 
-      if(tmp!= 255){
-         comandoAdmin = tmp - '0';  
-      }      
+      if(tmp == 255) return;
+         comandoAdmin = tmp - '0';        
       if(comandoAdmin == 1){
          printf(lcd_escreve, "\f Incluir Pessoa"); 
-         tipoTela = 2;
-         limpaSenha();
-         delay_ms(2000);          
+         tipoTela = 2;          
       }else if(comandoAdmin == 2){
          printf(lcd_escreve, "\fExcluir Pessoa"); 
-         tipoTela = 3;
-         limpaSenha();
-         delay_ms(2000);           
+         tipoTela = 3;                
       }
-       comandoAdmin = 0;
-   }else if (tipoTela == 2){
-      printf(lcd_escreve, "\fInf. p/ incluir\n\rSenha: %s", senha);
-      if(tmp!= 255){
+      limpaSenha();
+      delay_ms(2000);
+      comandoAdmin = 0;
+}
+
+void telaIncluir(){
+   printf(lcd_escreve, "\fInf. p/ incluir\n\rSenha: %s", senha);
+      if(tmp == 255) return;
          if(posicaoSenha == 4){
             posicaoSenha = 0;
          } 
@@ -103,13 +89,15 @@ void RB_isr(void)
             limpaSenha();
             tipoTela = 0;
          }else{
-            senha[posicaoSenha] = tmp;
-            posicaoSenha++;
+            senha[posicaoSenha++] = tmp;        
          }
-      }
-   }else if (tipoTela == 3){
+     
+}
+
+
+void telaExcluir(){
     printf(lcd_escreve, "\fInf. p/ excluir\n\rSenha: %s", senha);
-    if(tmp!= 255){
+   if(tmp == 255) return;
         if(posicaoSenha == 4){
             posicaoSenha = 0;
          } 
@@ -120,17 +108,30 @@ void RB_isr(void)
             limpaSenha();
             tipoTela = 0;
          }else{
-            senha[posicaoSenha] = tmp;
-            posicaoSenha++;
+            senha[posicaoSenha++] = tmp;
          }
-    }    
+        
+}
+
+#INT_RB
+void RB_isr(void) 
+{
+   disable_interrupts(INT_RB);
+   clear_interrupt(INT_RB);
+   
+   tmp = tc_tecla();
+   if (tipoTela == 0){
+      telaPrincipal();      
+   }else if(tipoTela == 1){
+      telaCrudAdmin();
+   }else if (tipoTela == 2){
+      telaIncluir();
+   }else if (tipoTela == 3){
+      telaExcluir();
   }
-   
- 
-   
+
    clear_interrupt(INT_RB);
    enable_interrupts(INT_RB);
-
    output_low(PIN_B0);
    output_low(PIN_B1);
    output_low(PIN_B2);
