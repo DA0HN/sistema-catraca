@@ -3,6 +3,9 @@ module catraca.control.desktop {
   requires javafx.controls;
   requires javafx.fxml;
   requires com.jfoenix;
+
+  requires java.desktop;
+
   // Lombok impl
   requires lombok;
   requires java.xml.bind;
