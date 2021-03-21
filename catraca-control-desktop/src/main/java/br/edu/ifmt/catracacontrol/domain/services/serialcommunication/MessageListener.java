@@ -2,6 +2,7 @@ package br.edu.ifmt.catracacontrol.domain.services.serialcommunication;
 
 import br.edu.ifmt.catracacontrol.domain.services.Console;
 import br.edu.ifmt.catracacontrol.domain.services.IClientService;
+import br.edu.ifmt.catracacontrol.domain.services.SerialCommunicationService;
 import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortEvent;
 import com.fazecast.jSerialComm.SerialPortMessageListener;
@@ -13,9 +14,9 @@ public class MessageListener implements SerialPortMessageListener {
 
   @Getter
   private final Console console;
-  private final IClientService service;
+  private final SerialCommunicationService service;
 
-  public MessageListener(Console console, IClientService service) {
+  public MessageListener(Console console, SerialCommunicationService service) {
     this.console = console;
     this.service = service;
   }
