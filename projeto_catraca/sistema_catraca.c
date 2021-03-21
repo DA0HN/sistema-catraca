@@ -1,7 +1,7 @@
 #include <sistema_catraca.h>
 #include <math.h>
 #include <stdio.h>
-#INCLUDE < 2404.C>
+#INCLUDE <2404.C>
 #include "lib/lcd_util.c"
 #include "lib/teclado_util.c"
 #include "lib/memoria_util.c"
@@ -74,7 +74,7 @@ void telaPrincipal()
 
 void telaCrudAdmin()
 {
-   printf(lcd_escreve, "\f1- Incluir\n\r2- Excluir");
+   printf(lcd_escreve, "\f1-Inc   2-Exc\n\r3-Verif 4-Atua");
    if (tmp == 255)
       return;
    comandoAdmin = tmp - '0';
@@ -87,6 +87,16 @@ void telaCrudAdmin()
    {
       printf(lcd_escreve, "\fExcluir Pessoa");
       tipoTela = 3;
+   }
+   else if (comandoAdmin == 3)
+   {
+      printf(lcd_escreve, "\fVerifica Pessoa");
+      tipoTela = 4;
+   }
+   else if (comandoAdmin == 4)
+   {
+      printf(lcd_escreve, "\fAtualiza Memoria");
+      tipoTela = 5;
    }
    limpaSenha();
    delay_ms(2000);
@@ -139,6 +149,60 @@ void telaExcluir()
    }
 }
 
+
+void telaVerificar()
+{
+   printf(lcd_escreve, "\fInf. p/ verificar\n\rSenha: %s", senha);
+   if (tmp == 255)
+      return;
+   if (posicaoSenha == 4)
+   {
+      posicaoSenha = 0;
+   }
+   if (tmp == 'D')
+   {
+      if(verificaUsuario(senha) == 0){
+         printf(lcd_escreve, "\fUsuario Valido");
+      }else{
+         printf(lcd_escreve, "\fUsuario Invalido");
+      }
+      delay_ms(2000);
+      limpaSenha();
+      tipoTela = 0;
+   }
+   else
+   {
+      senha[posicaoSenha++] = tmp;
+   }
+}
+
+void telaAtualizaDados()
+{
+   /*
+   printf(lcd_escreve, "\fInf. p/ verificar\n\rSenha: %s", senha);
+   if (tmp == 255)
+      return;
+   if (posicaoSenha == 4)
+   {
+      posicaoSenha = 0;
+   }
+   if (tmp == 'D')
+   {
+      if(verificaUsuario(senha) == 0){
+         printf(lcd_escreve, "\fUsuario Valido");
+      }else{
+         printf(lcd_escreve, "\fUsuario Invalido");
+      }
+      delay_ms(2000);
+      limpaSenha();
+      tipoTela = 0;
+   }
+   else
+   {
+      senha[posicaoSenha++] = tmp;
+   }*/
+}
+
 #INT_RB
 void RB_isr(void)
 {
@@ -161,6 +225,14 @@ void RB_isr(void)
    else if (tipoTela == 3)
    {
       telaExcluir();
+   }
+   else if (tipoTela == 4)
+   {
+      telaVerificar();
+   }
+   else if (tipoTela == 5)
+   {
+      telaAtualizaDados();
    }
 
    clear_interrupt(INT_RB);
