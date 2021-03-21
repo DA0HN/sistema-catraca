@@ -4,9 +4,17 @@
 
 .label {
     -fx-font-size: 11pt;
-    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-family: Georgia;
     -fx-text-fill: white;
     -fx-opacity: 0.6;
+}
+
+.erro {
+    -fx-font-size: 10pt;
+    -fx-font-family: Georgia;
+    -fx-text-fill: red;
+    -fx-opacity: 0.6;
+    -fx-fill: red;
 }
 
 .label:focused .text{
