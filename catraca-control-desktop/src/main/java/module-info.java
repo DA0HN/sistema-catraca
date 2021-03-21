@@ -11,6 +11,8 @@ module catraca.control.desktop {
   requires java.sql;
   requires java.persistence;
   requires java.base;
+  requires de.jensd.fx.glyphs.fontawesome;
+  requires de.jensd.fx.glyphs.commons;
 
   opens br.edu.ifmt.catracacontrol;
   opens br.edu.ifmt.catracacontrol.controllers;
