@@ -11,6 +11,9 @@ char senha[4];
 int posicaoSenha = 0;
 int tipoTela = 0;
 int comandoAdmin = 0;
+ int ch;
+int contLinha = 1;
+int contColuna = 0;
 
 void telaStatus()
 {
@@ -214,11 +217,14 @@ void RB_isr(void)
 }
 
 #INT_RDA
-void  recebe_serial(void) 
-{
-     recebeDados();   
-     printf(lcd_escreve, "\fRecebendo Dados\n\r  Aguarde!");
-     delay_ms(2000);
+void  RDA_isr(void) 
+{  
+    ch = getc();
+    if(ch == '\n'){
+      contLinha++;
+      contColuna = 0;
+    }
+    recebeDados(ch, contLinha, contColuna++);
 }
 
 void main()

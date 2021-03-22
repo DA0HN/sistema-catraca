@@ -185,14 +185,8 @@ void enviaDados(){
     }
 }
 
-void recebeDados(){
-   
-  for (int i = 0; i < LINHA; i++)
-    {
-       for (int J = 0; J < COLUNA; J++)
-       {
-           gets(dados[i][j]);
-       }
-     }
-     salvaMemoria();
+void recebeDados(int ch, int line, int col){
+   dados[line][col] = ch;
+    salvaMemoria();
 }
+
