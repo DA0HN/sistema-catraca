@@ -42,17 +42,24 @@ public class SerialCommunicationService {
   public void updatePIC() {
     var clients = this.clientService.findAll();
     var writer = this.serialPort.getOutputStream();
-
+    try {
+      console.getWriter().println('I');
+      writer.write('I');
+    }catch (IOException e) {
+      e.printStackTrace();
+    }
     clients.forEach(client -> {
       try {
         var id = client.getId().toString();
         var status = client.getStatus() == null ? client.getStatus().getCode().toString() : 0;
         var password = client.getPassword();
-        String data = 'I' + id + status + password + 'F';
+        String data =   id + status + password  ;
+
         console.getWriter().println(data);
+
         for(var ch : data.toCharArray()) {
           writer.write(ch);
-          TimeUnit.MILLISECONDS.sleep(500);
+          TimeUnit.MILLISECONDS.sleep(750);
           writer.flush();
         }
       }
@@ -60,5 +67,11 @@ public class SerialCommunicationService {
         e.printStackTrace();
       }
     });
+    try {
+      console.getWriter().println('F');
+      writer.write('F');
+    }catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 }

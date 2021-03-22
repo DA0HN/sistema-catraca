@@ -185,8 +185,13 @@ void enviaDados(){
     }
 }
 
-void recebeDados(int ch, int line, int col){
+void recebeDados(char ch, int line, int col){
    dados[line][col] = ch;
-    salvaMemoria();
+   salvaMemoria();
+   /*if(*a ==1 && *b ==1){
+      salvaMemoria();
+       *a = 0;
+       *b = 0;
+   }  */ 
 }
 

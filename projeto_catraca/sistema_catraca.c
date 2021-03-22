@@ -11,9 +11,12 @@ char senha[4];
 int posicaoSenha = 0;
 int tipoTela = 0;
 int comandoAdmin = 0;
- int ch;
-int contLinha = 1;
-int contColuna = 0;
+
+
+int lin = 1;
+int col = 0;
+char ch;
+int flagI = 0, flagF = 0;
 
 void telaStatus()
 {
@@ -180,6 +183,27 @@ void telaVerificar()
    }
 }
 
+#INT_RDA
+void  RDA_isr(void) 
+{      
+   output_toggle(PIN_D0);
+   ch = getc();
+  if(ch == 'I'){ //inicio de leitura
+      lin = 1;
+      col = 0;
+      flagI = 1;
+  }else if(ch == 'F'){
+      flagF = 1; // final de leitura
+  }else{
+      if(col == 6){ // ao final da coluna reseta ela e incrementa linha
+         col = 0;
+         lin++;
+      }      
+      recebeDados(ch, lin, col++);
+  }
+}
+
+
 #INT_RB
 void RB_isr(void)
 {
@@ -216,36 +240,27 @@ void RB_isr(void)
    output_low(PIN_B3);
 }
 
-#INT_RDA
-void  RDA_isr(void) 
-{  
-    ch = getc();
-    if(ch == '\n'){
-      contLinha++;
-      contColuna = 0;
-    }
-    recebeDados(ch, contLinha, contColuna++);
-}
-
 void main()
 {
 
    init_ext_eeprom();
-   //apagaMemoria();
+   apagaMemoria();
    carregaMemoria();
-   //configuracaoMemoria();
-
+   configuracaoMemoria();
+   output_low(PIN_D0);
    lcd_ini();
    delay_ms(10);
 
    printf(lcd_escreve, "\f Teclado");
    delay_ms(1000);
 
+   enable_interrupts(INT_RDA);
    set_tris_b(0xF0);
    port_B_pullups(true);
+  
    enable_interrupts(INT_RB);
    enable_interrupts(GLOBAL);
-   enable_interrupts(INT_RDA);
+   
    output_low(PIN_B0);
    output_low(PIN_B1);
    output_low(PIN_B2);
