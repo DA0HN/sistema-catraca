@@ -6,6 +6,7 @@
 #include "lib/teclado_util.c"
 #include "lib/memoria_util.c"
 
+
 unsigned char tmp;
 char senha[4];
 int posicaoSenha = 0;
@@ -16,7 +17,6 @@ int comandoAdmin = 0;
 int lin = 1;
 int col = 0;
 char ch;
-int flagI = 0, flagF = 0;
 
 void telaStatus()
 {
@@ -187,20 +187,21 @@ void telaVerificar()
 void  RDA_isr(void) 
 {      
    output_toggle(PIN_D0);
-   ch = getc();
-  if(ch == 'I'){ //inicio de leitura
-      lin = 1;
-      col = 0;
-      flagI = 1;
-  }else if(ch == 'F'){
-      flagF = 1; // final de leitura
-  }else{
-      if(col == 6){ // ao final da coluna reseta ela e incrementa linha
-         col = 0;
-         lin++;
-      }      
-      recebeDados(ch, lin, col++);
-  }
+   ch = getc();  
+      if(ch == 'F'){     //final de leitura               
+             tipoTela = 0;
+      }
+     else if(ch == 'I'){ //inicio de leitura     
+            lin = 1;
+            col = 0;
+            tipoTela = 5;
+      }else{
+         if(col == 6){// ao final da coluna reseta ela e incrementa linha
+            col = 0;    
+            lin++;
+         }               
+       recebeDados(ch, lin, col++);
+      }       
 }
 
 
@@ -212,32 +213,30 @@ void RB_isr(void)
 
    tmp = tc_tecla();
    if (tipoTela == 0)
-   {
-      telaPrincipal();
-   }
-   else if (tipoTela == 1)
-   {
-      telaCrudAdmin();
-   }
-   else if (tipoTela == 2)
-   {
-      telaIncluir();
-   }
-   else if (tipoTela == 3)
-   {
-      telaExcluir();
-   }
-   else if (tipoTela == 4)
-   {
-      telaVerificar();
-   }
-
+      {
+         telaPrincipal();
+      }
+      else if (tipoTela == 1)
+      {
+         telaCrudAdmin();
+      }
+      else if (tipoTela == 2)
+      {
+         telaIncluir();
+      }
+      else if (tipoTela == 3)
+      {
+         telaExcluir();
+      }
+      else if (tipoTela == 4)
+      {
+         telaVerificar();
+      }else if (tipoTela == 5)
+      {
+         printf(lcd_escreve, "\fLeitura Iniciada\n\r   Aguarde!");
+      }
    clear_interrupt(INT_RB);
    enable_interrupts(INT_RB);
-   output_low(PIN_B0);
-   output_low(PIN_B1);
-   output_low(PIN_B2);
-   output_low(PIN_B3);
 }
 
 void main()
@@ -251,15 +250,14 @@ void main()
    lcd_ini();
    delay_ms(10);
 
-   printf(lcd_escreve, "\f Teclado");
+   printf(lcd_escreve, "\f   Iniciando");
    delay_ms(1000);
-
-   enable_interrupts(INT_RDA);
+   
    set_tris_b(0xF0);
    port_B_pullups(true);
-  
+   enable_interrupts(GLOBAL); 
+   enable_interrupts(INT_RDA);
    enable_interrupts(INT_RB);
-   enable_interrupts(GLOBAL);
    
    output_low(PIN_B0);
    output_low(PIN_B1);
@@ -267,6 +265,7 @@ void main()
    output_low(PIN_B3);
 
    while (TRUE)
-   {
+   {    
+      
    }
 }

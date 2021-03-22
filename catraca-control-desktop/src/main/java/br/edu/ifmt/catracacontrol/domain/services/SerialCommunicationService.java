@@ -54,9 +54,7 @@ public class SerialCommunicationService {
         var status = client.getStatus() == null ? client.getStatus().getCode().toString() : 0;
         var password = client.getPassword();
         String data =   id + status + password  ;
-
         console.getWriter().println(data);
-
         for(var ch : data.toCharArray()) {
           writer.write(ch);
           TimeUnit.MILLISECONDS.sleep(750);
@@ -70,7 +68,9 @@ public class SerialCommunicationService {
     try {
       console.getWriter().println('F');
       writer.write('F');
-    }catch (IOException e) {
+      TimeUnit.MILLISECONDS.sleep(750);
+      writer.flush();
+    }catch (IOException | InterruptedException e) {
       e.printStackTrace();
     }
   }

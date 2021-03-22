@@ -74,6 +74,24 @@ int verificaPosicaoNula()
    return (-1);
 }
 
+int verificaUsuario(unsigned char cadastro[4])
+{
+   if (verificaSenha(cadastro, 0))
+   {
+      printf(lcd_escreve, "\fBem Vindo Admin!");
+      delay_ms(2000);
+      return 1;
+   }
+   for (int i = 1; i < LINHA; i++)
+   {
+      if (verificaSenha(cadastro, i))
+      {
+         return 0;
+      }
+   }
+   return (-1);
+}
+
 void novoUsuario(unsigned char cadastro[4])
 { //cadastras um novo usuario na memoria
    int posicaoLinha = verificaPosicaoNula();
@@ -88,6 +106,12 @@ void novoUsuario(unsigned char cadastro[4])
       return;
    }
 
+   if(verificaUsuario(cadastro) == 0){
+      printf(lcd_escreve, "\f   Erro!\n\r");
+      printf(lcd_escreve, "Usuario Existente");
+      delay_ms(2000);
+      return;
+   }
    for (int i = 2; i < COLUNA; i++)
    {
       dados[posicaoLinha][i] = cadastro[i - 2];
@@ -107,23 +131,6 @@ void excluiUsuario(unsigned char cadastro[4])
    salvaMemoria();
 }
 
-int verificaUsuario(unsigned char cadastro[4])
-{
-   if (verificaSenha(cadastro, 0))
-   {
-      printf(lcd_escreve, "\fBem Vindo Admin!");
-      delay_ms(2000);
-      return 1;
-   }
-   for (int i = 1; i < LINHA; i++)
-   {
-      if (verificaSenha(cadastro, i))
-      {
-         return 0;
-      }
-   }
-   return (-1);
-}
 
 void configuracaoMemoria()
 { // configura��es inicias da memoria
@@ -188,10 +195,5 @@ void enviaDados(){
 void recebeDados(char ch, int line, int col){
    dados[line][col] = ch;
    salvaMemoria();
-   /*if(*a ==1 && *b ==1){
-      salvaMemoria();
-       *a = 0;
-       *b = 0;
-   }  */ 
 }
 
