@@ -7,6 +7,7 @@ import lombok.Getter;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class SerialCommunicationService {
 
@@ -48,6 +49,7 @@ public class SerialCommunicationService {
     }catch (IOException e) {
       e.printStackTrace();
     }
+    AtomicInteger cont = new AtomicInteger();
     clients.forEach(client -> {
       try {
         var id = client.getId().toString();
@@ -60,18 +62,21 @@ public class SerialCommunicationService {
           TimeUnit.MILLISECONDS.sleep(750);
           writer.flush();
         }
+        cont.getAndIncrement();
+        if(cont.get() == clients.size()){
+          console.getWriter().println('F');
+          writer.write('F');
+
+          TimeUnit.MILLISECONDS.sleep(750);
+          writer.flush();
+        }
       }
       catch(IOException | InterruptedException e) {
         e.printStackTrace();
       }
     });
-    try {
-      console.getWriter().println('F');
-      writer.write('F');
-      TimeUnit.MILLISECONDS.sleep(750);
-      writer.flush();
-    }catch (IOException | InterruptedException e) {
-      e.printStackTrace();
-    }
+
+
+
   }
 }

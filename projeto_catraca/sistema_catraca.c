@@ -80,7 +80,7 @@ void telaPrincipal()
 
 void telaCrudAdmin()
 {
-   printf(lcd_escreve, "\f1-Inc   2-Exc\n\r3-Verif 4-Atua");
+   printf(lcd_escreve, "\f1-Inc   2-Exc\n\r3-Verif  4-Atul");
    if (tmp == 255)
       return;
    comandoAdmin = tmp - '0';
@@ -101,9 +101,8 @@ void telaCrudAdmin()
    }
    else if (comandoAdmin == 4)
    {
-      printf(lcd_escreve, "\f Enviando Dados\n\rPara Computador");
-      enviaDados();
-      tipoTela = 0;
+      printf(lcd_escreve, "\fEnvia Dados \n\rp/ Computador");
+      tipoTela = 5;
    }
    limpaSenha();
    delay_ms(2000);
@@ -186,22 +185,21 @@ void telaVerificar()
 #INT_RDA
 void  RDA_isr(void) 
 {      
+   char usuario[6];
    output_toggle(PIN_D0);
    ch = getc();  
-      if(ch == 'F'){     //final de leitura               
-             tipoTela = 0;
-      }
-     else if(ch == 'I'){ //inicio de leitura     
+   if(ch == 'I'){ //inicio de leitura     
             lin = 1;
-            col = 0;
-            tipoTela = 5;
-      }else{
-         if(col == 6){// ao final da coluna reseta ela e incrementa linha
-            col = 0;    
-            lin++;
-         }               
+            col = 0;      
+      }else if(ch != 'F'){     //final de leitura               
+            if(col == 6){
+            // ao final da coluna reseta ela e incrementa linha
+               col = 0;    
+               lin++;
+         }  
+
        recebeDados(ch, lin, col++);
-      }       
+      }      
 }
 
 
@@ -231,19 +229,24 @@ void RB_isr(void)
       else if (tipoTela == 4)
       {
          telaVerificar();
-      }else if (tipoTela == 5)
+      }
+      else if (tipoTela == 5)
       {
-         printf(lcd_escreve, "\fLeitura Iniciada\n\r   Aguarde!");
+        enviaDados();
+        tipoTela = 0;
+        delay_ms(2000);
+        printf(lcd_escreve, "\fDados Enviados");
+        delay_ms(1000);
       }
    clear_interrupt(INT_RB);
    enable_interrupts(INT_RB);
 }
 
 void main()
-{
-
+{ 
+   
    init_ext_eeprom();
-   apagaMemoria();
+  apagaMemoria();
    carregaMemoria();
    configuracaoMemoria();
    output_low(PIN_D0);
