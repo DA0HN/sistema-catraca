@@ -2,12 +2,14 @@ package br.edu.ifmt.catracacontrol.controllers;
 
 import br.edu.ifmt.catracacontrol.domain.services.ClientService;
 import br.edu.ifmt.catracacontrol.domain.services.Console;
-import br.edu.ifmt.catracacontrol.domain.services.IClientService;
 import br.edu.ifmt.catracacontrol.domain.services.SerialCommunicationService;
+import br.edu.ifmt.catracacontrol.views.HomeView;
 import com.fazecast.jSerialComm.SerialPort;
 import com.jfoenix.controls.JFXTextArea;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,6 +29,25 @@ public class TransferDataController implements Initializable {
   @FXML
   private JFXTextArea outputTextArea;
 
+  @FXML
+  private Button updatePICOnAction;
+
+  @FXML
+  private Button backButton;
+
+  @FXML
+  void backButtonOnAction(MouseEvent event) throws Exception {
+    this.serialCommunicationService.closeCommunication();
+    var homeView = new HomeView();
+    homeView.start(stage);
+  }
+
+  @FXML
+  void updatePICOnAction(MouseEvent event) {
+    this.serialCommunicationService.updatePIC();
+  }
+
+
   @Override public void initialize(URL location, ResourceBundle resources) {
     try {
       this.serialCommunicationService = new SerialCommunicationService(
@@ -37,9 +58,13 @@ public class TransferDataController implements Initializable {
         new Console(outputTextArea),
         new ClientService()
       );
+      this.serialCommunicationService.getConsole()
+        .getWriter()
+        .println("Iniciando comunicação serial na porta COM2");
       this.serialCommunicationService.openCommunication();
     }
     catch(Exception e) {
+      e.printStackTrace();
     }
   }
 
