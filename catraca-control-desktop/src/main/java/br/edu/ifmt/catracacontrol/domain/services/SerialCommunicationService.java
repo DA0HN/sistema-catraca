@@ -10,7 +10,6 @@ import lombok.Getter;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.StringJoiner;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -81,6 +80,35 @@ public class SerialCommunicationService {
     }
     catch(IOException e) {
       e.printStackTrace();
+    }
+  }
+
+  // TODO: adicionar binding reativo (ver classe Console)
+  public void processData(String[] data) throws IOException {
+    try {
+      if(Arrays.stream(data).allMatch(s -> s.equals("-49"))) {
+        this.console.appendMessage("Linha em branco!");
+        return;
+      }
+
+      if(String.join("", data).equals("update")) {
+        this.updatePIC();
+        return;
+      }
+
+      var id = data[0];
+      var status = data[1];
+      var password = data[2];
+
+
+      var client = new Client();
+      client.setPassword(password);
+      client.setStatus(Status.fromCode(Integer.parseInt(status)));
+      clientService.save(client);
+      this.console.appendMessage("O Cliente " + client.getPassword() + " foi armazenado.");
+    }
+    catch(ServiceException e) {
+      this.console.appendMessage(e.getMessage());
     }
   }
 }
