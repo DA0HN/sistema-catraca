@@ -128,7 +128,7 @@
 }
 
 .text-area {
-    -fx-font-family: Georgia;
+    -fx-font-family: Inconsolata;
     -fx-prompt-text-fill: #02ff35;
     -fx-text-fill: #02ff35;
     -fx-font-size: 13;
