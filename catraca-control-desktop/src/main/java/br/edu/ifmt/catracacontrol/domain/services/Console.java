@@ -1,20 +1,27 @@
 package br.edu.ifmt.catracacontrol.domain.services;
 
 import com.jfoenix.controls.JFXTextArea;
+import javafx.beans.property.SimpleStringProperty;
+import lombok.Getter;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.PrintStream;
 
 public class Console extends OutputStream {
 
-  private final JFXTextArea output;
-  private final PrintStream writer;
+  @Getter private final JFXTextArea output;
+  @Getter private final SimpleStringProperty content;
 
   // https://stackoverflow.com/questions/13841884/redirecting-system-out-to-a-textarea-in-javafx
   public Console(JFXTextArea output) {
-    this.writer = new PrintStream(this, true);
     this.output = output;
+    this.content = new SimpleStringProperty("");
+//    https://stackoverflow.com/questions/30573461/auto-scroll-down-a-textarea
+    this.content.addListener((observable, oldValue, newValue) -> {
+      this.output.selectPositionCaret(this.output.getLength());
+      this.output.deselect();
+    });
+    this.output.textProperty().bind(content);
   }
 
   @Override
@@ -22,7 +29,7 @@ public class Console extends OutputStream {
     output.appendText(String.valueOf((char) i));
   }
 
-  public PrintStream getWriter() {
-    return writer;
+  public void appendMessage(String message) {
+    this.content.setValue(this.content.getValue() + message + '\n');
   }
 }

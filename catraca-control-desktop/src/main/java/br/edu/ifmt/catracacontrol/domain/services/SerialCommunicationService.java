@@ -3,6 +3,7 @@ package br.edu.ifmt.catracacontrol.domain.services;
 import br.edu.ifmt.catracacontrol.domain.services.serialcommunication.MessageListener;
 import br.edu.ifmt.catracacontrol.domain.services.serialcommunication.WriterListener;
 import com.fazecast.jSerialComm.SerialPort;
+import javafx.beans.property.SimpleStringProperty;
 import lombok.Getter;
 
 import java.io.IOException;
@@ -44,39 +45,37 @@ public class SerialCommunicationService {
     var clients = this.clientService.findAll();
     var writer = this.serialPort.getOutputStream();
     try {
-      console.getWriter().println('I');
+      this.console.appendMessage("I");
       writer.write('I');
-    }catch (IOException e) {
+      AtomicInteger cont = new AtomicInteger();
+      clients.forEach(client -> {
+        try {
+          var id = client.getId().toString();
+          var status = client.getStatus() == null ? client.getStatus().getCode().toString() : 0;
+          var password = client.getPassword();
+          String data = id + status + password;
+          this.console.appendMessage(data);
+          for(var ch : data.toCharArray()) {
+            writer.write(ch);
+            TimeUnit.MILLISECONDS.sleep(550);
+            writer.flush();
+          }
+          cont.getAndIncrement();
+          if(cont.get() == clients.size()) {
+            this.console.appendMessage("F");
+            writer.write('F');
+
+            TimeUnit.MILLISECONDS.sleep(550);
+            writer.flush();
+          }
+        }
+        catch(IOException | InterruptedException e) {
+          e.printStackTrace();
+        }
+      });
+    }
+    catch(IOException e) {
       e.printStackTrace();
     }
-    AtomicInteger cont = new AtomicInteger();
-    clients.forEach(client -> {
-      try {
-        var id = client.getId().toString();
-        var status = client.getStatus() == null ? client.getStatus().getCode().toString() : 0;
-        var password = client.getPassword();
-        String data =   id + status + password  ;
-        console.getWriter().println(data);
-        for(var ch : data.toCharArray()) {
-          writer.write(ch);
-          TimeUnit.MILLISECONDS.sleep(750);
-          writer.flush();
-        }
-        cont.getAndIncrement();
-        if(cont.get() == clients.size()){
-          console.getWriter().println('F');
-          writer.write('F');
-
-          TimeUnit.MILLISECONDS.sleep(750);
-          writer.flush();
-        }
-      }
-      catch(IOException | InterruptedException e) {
-        e.printStackTrace();
-      }
-    });
-
-
-
   }
 }
