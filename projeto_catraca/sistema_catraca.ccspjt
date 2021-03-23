@@ -11,18 +11,23 @@ Type=4
 1=sistema_catraca.c
 
 [ProjectLog]
-Days=1
+Days=2
 D1=19-03-2021
 D1_L=3
 D1_L1=[78711]Project Opened.
 D1_L2=[78734]Project Closed.
 D1_L3=[78796]Project Opened.
+D2=23-03-2021
+D2_L=1
+D2_L1=[44306]Project Opened.
 
 [Opened Files]
 1=sistema_catraca.c
-2=lib\memoria_util.c
+2=
 3=
 4=
+5=
+6=
 [Directories]
 Include=C:\Program Files (x86)\PICC\Devices\;C:\Program Files (x86)\PICC\Drivers\
 [Units]

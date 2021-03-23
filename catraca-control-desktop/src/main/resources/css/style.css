@@ -1,12 +1,23 @@
+/*https://code.makery.ch/pt/library/javafx-tutorial/part4//*/
+/*https://www.vojtechruzicka.com/javafx-css/*/
+
 .background {
     -fx-background-color: #1d1d1d;
 }
 
 .label {
     -fx-font-size: 11pt;
-    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-family: Georgia;
     -fx-text-fill: white;
     -fx-opacity: 0.6;
+}
+
+.erro {
+    -fx-font-size: 10pt;
+    -fx-font-family: Georgia;
+    -fx-text-fill: red;
+    -fx-opacity: 0.6;
+    -fx-fill: red;
 }
 
 .label:focused .text{
@@ -18,9 +29,11 @@
     -fx-background-radius: 0;
     -fx-border-color: white;
     -fx-border-width: 1 1 1 1;
+    -fx-font-family: Georgia;
 }
 .button .text{
     -fx-fill: white;
+    -fx-font-family: Georgia;
 }
 
 .button:hover {
@@ -100,4 +113,29 @@
 
 .gradient {
     -fx-background-color: linear-gradient(to top, #1d1d1d, derive(#1d1d1d, 40%));
+}
+
+.text-field {
+    -fx-background-color: derive(#1d1d1d, 60%);
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: white;
+    -fx-font-family: Georgia;
+    -fx-font-size: 12;
+}
+
+.text-field:focused {
+    -fx-background-color: derive(#1d1d1d, 30%);
+}
+
+.text-area {
+    -fx-font-family: Georgia;
+    -fx-prompt-text-fill: #02ff35;
+    -fx-text-fill: #02ff35;
+    -fx-font-size: 13;
+}
+
+.text-area:hover {
+    -fx-background-radius: 0;
+    -fx-border-color: #02ff35;
+    -fx-border-width: 1 1 1 1;
 }

@@ -8,6 +8,8 @@ public class RepositoryConfig {
 
   private static final EntityManagerFactory factory;
 
+  private RepositoryConfig() {}
+
   static {
     factory = Persistence.createEntityManagerFactory("catraca-system");
   }
