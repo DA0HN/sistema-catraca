@@ -1,7 +1,6 @@
 package br.edu.ifmt.catracacontrol.domain.services.serialcommunication;
 
 import br.edu.ifmt.catracacontrol.domain.services.Console;
-import br.edu.ifmt.catracacontrol.domain.services.IClientService;
 import br.edu.ifmt.catracacontrol.domain.services.SerialCommunicationService;
 import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortEvent;
