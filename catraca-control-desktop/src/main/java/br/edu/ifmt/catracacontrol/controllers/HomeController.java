@@ -9,7 +9,6 @@ import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
-import javax.swing.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
