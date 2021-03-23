@@ -42,17 +42,10 @@ public class MessageListener implements SerialPortMessageListener {
 
   @Override
   public void serialEvent(SerialPortEvent event) {
-    try {
-      byte[] delimitedMessage = event.getReceivedData();
-      console.getWriter().println(
-        "[" + formatter.format(LocalDate.now()) + "] " +
-          "Chegou a mensagem: " + new String(delimitedMessage)
-      );
-      console.getWriter().flush();
-      service.processData(new String(delimitedMessage).split(","));
-    }
-    catch(InterruptedException e) {
-      e.printStackTrace();
-    }
+    byte[] delimitedMessage = event.getReceivedData();
+    this.service.getConsole().appendMessage(
+      "[" + formatter.format(LocalDateTime.now()) + "] " +
+        new String(delimitedMessage)
+    );
   }
 }
