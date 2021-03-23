@@ -15,4 +15,14 @@ public enum Status {
     this.code = code;
     this.status = status;
   }
+
+  public static Status fromCode(Integer code) {
+    for(Status status : Status.values()) {
+      if(status.getCode().equals(code)) {
+        return status;
+      }
+    }
+    throw new IllegalStateException("Não foi possível identificar o código " + code);
+  }
+
 }
