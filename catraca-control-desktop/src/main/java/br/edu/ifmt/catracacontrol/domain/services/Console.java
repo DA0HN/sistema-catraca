@@ -16,7 +16,7 @@ public class Console extends OutputStream {
   public Console(JFXTextArea output) {
     this.output = output;
     this.content = new SimpleStringProperty("");
-//    https://stackoverflow.com/questions/30573461/auto-scroll-down-a-textarea
+  // https://stackoverflow.com/questions/30573461/auto-scroll-down-a-textarea
     this.content.addListener((observable, oldValue, newValue) -> {
       this.output.selectPositionCaret(this.output.getLength());
       this.output.deselect();

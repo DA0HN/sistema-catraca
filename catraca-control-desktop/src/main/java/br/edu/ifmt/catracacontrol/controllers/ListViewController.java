@@ -76,7 +76,11 @@ public class ListViewController implements Initializable {
         removeButton.setDisable(false);
       });
   }
-
+  // https://docs.oracle.com/javafx/2/ui_controls/table-view.htm
+  // https://examples.javacodegeeks.com/desktop-java/javafx/tableview/javafx-tableview-example/
+  // https://medium.com/@antonio.gabriel/javafx-trabalhando-com-tableview-5cc1065babab/
+  // http://tutorials.jenkov.com/javafx/tableview.html
+  // https://riptutorial.com/javafx/example/27946/add-button-to-tableview
   private void chargeTableView() {
     var clients = service.findAll()
                     .stream()
