@@ -52,7 +52,7 @@ public class TransferDataController implements Initializable {
     try {
       this.serialCommunicationService = new SerialCommunicationService(
         Arrays.stream(SerialPort.getCommPorts())
-          .filter(p -> p.getSystemPortName().equals("COM1"))
+          .filter(p -> p.getSystemPortName().equals("COM2"))
           .findFirst()
           .get(),
         new Console(outputTextArea),
@@ -60,7 +60,7 @@ public class TransferDataController implements Initializable {
       );
       this.serialCommunicationService.getConsole()
         .getWriter()
-        .println("Iniciando comunicação serial na porta COM1");
+        .println("Iniciando comunicação serial na porta COM2");
       this.serialCommunicationService.openCommunication();
     }
     catch(Exception e) {
