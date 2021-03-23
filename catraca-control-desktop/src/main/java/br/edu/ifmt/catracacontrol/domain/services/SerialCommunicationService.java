@@ -14,11 +14,15 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import static java.util.Arrays.asList;
+
 public class SerialCommunicationService {
 
   @Getter private final IClientService clientService;
   @Getter private final SerialPort serialPort;
   @Getter private final Console console;
+
+  @Getter private final SimpleStringProperty message = new SimpleStringProperty();
 
   public SerialCommunicationService(SerialPort serialPort, Console console, IClientService clientService) {
     this.serialPort = serialPort;
@@ -31,6 +35,12 @@ public class SerialCommunicationService {
   private void configureListeners() {
     serialPort.addDataListener(new MessageListener(console, this));
     serialPort.addDataListener(new WriterListener(console));
+
+    message.addListener((observable, oldValue, newValue) -> {
+      System.out.println(newValue);
+      processData(newValue.split(","));
+    });
+
   }
 
   public SerialPort[] getPorts() {
@@ -68,9 +78,8 @@ public class SerialCommunicationService {
           if(cont.get() == clients.size()) {
             this.console.appendMessage("F");
             writer.write('F');
-
-            TimeUnit.MILLISECONDS.sleep(550);
             writer.flush();
+            TimeUnit.MILLISECONDS.sleep(550);
           }
         }
         catch(IOException | InterruptedException e) {
@@ -83,11 +92,15 @@ public class SerialCommunicationService {
     }
   }
 
-  // TODO: adicionar binding reativo (ver classe Console)
-  public void processData(String[] data) throws IOException {
+  public void processData(String[] data) {
     try {
       if(Arrays.stream(data).allMatch(s -> s.equals("-49"))) {
         this.console.appendMessage("Linha em branco!");
+        return;
+      }
+
+      if(asList(data).contains("-")) {
+        this.console.appendMessage(Arrays.toString(data) + " mensagem estranha...");
         return;
       }
 
@@ -98,8 +111,7 @@ public class SerialCommunicationService {
 
       var id = data[0];
       var status = data[1];
-      var password = data[2];
-
+      var password = String.join("", asList(data).subList(2, data.length));
 
       var client = new Client();
       client.setPassword(password);
