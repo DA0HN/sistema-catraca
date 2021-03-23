@@ -30,20 +30,20 @@ public class TransferDataController implements Initializable {
   private JFXTextArea outputTextArea;
 
   @FXML
-  private Button updatePICOnAction;
+  private Button updatePicButton;
 
   @FXML
   private Button backButton;
 
   @FXML
-  void backButtonOnAction(MouseEvent event) throws Exception {
+  void backButtonOnClicked(MouseEvent event) throws Exception {
     this.serialCommunicationService.closeCommunication();
     var homeView = new HomeView();
     homeView.start(stage);
   }
 
   @FXML
-  void updatePICOnAction(MouseEvent event) {
+  void updatePicButtonOnClicked(MouseEvent event) {
     this.serialCommunicationService.updatePIC();
   }
 
