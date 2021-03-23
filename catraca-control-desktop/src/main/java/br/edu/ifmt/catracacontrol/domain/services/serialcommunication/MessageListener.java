@@ -8,9 +8,11 @@ import com.fazecast.jSerialComm.SerialPortMessageListener;
 import lombok.Getter;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -19,7 +21,6 @@ public class MessageListener implements SerialPortMessageListener {
   @Getter
   private final Console console;
   private final SerialCommunicationService service;
-  private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm:ss");
 
   public MessageListener(Console console, SerialCommunicationService service) {
     this.console = console;
