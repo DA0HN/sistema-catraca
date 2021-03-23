@@ -1,7 +1,7 @@
 [PROJECT]
 Target=sistema_catraca.hex
 Processor_Text=PIC16F877A
-CCSVersion=5.015
+CCSVersion=5.025
 Compiler=PCM
 [Target Data]
 FileList=sistema_catraca.c
@@ -11,18 +11,28 @@ Type=4
 1=sistema_catraca.c
 
 [ProjectLog]
-Days=1
+Days=2
 D1=19-03-2021
 D1_L=3
 D1_L1=[78711]Project Opened.
 D1_L2=[78734]Project Closed.
 D1_L3=[78796]Project Opened.
+D2=23-03-2021
+D2_L=8
+D2_L1=[27975]Started Editing.
+D2_L2=[28280]Stopped Editing.
+D2_L3=[29703]Started Editing.
+D2_L4=[30026]Stopped Editing.
+D2_L5=[30061]Started Editing.
+D2_L6=[30440]Stopped Editing.
+D2_L7=[32619]Started Editing.
+D2_L8=[32919]Stopped Editing.
 
 [Opened Files]
 1=sistema_catraca.c
-2=tela_util.c
-3=
-4=
+2=lib\memoria_util.c
+3=sistema_catraca.h
+4=lib\lcd_util.c
 5=
 6=
 [Directories]
