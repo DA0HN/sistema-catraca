@@ -14,7 +14,7 @@ Type=4
 1=externa.c
 
 [ProjectLog]
-Days=3
+Days=4
 D1=16-03-2021
 D1_L=6
 D1_L1=[75560]Project Opened.
@@ -22,7 +22,7 @@ D1_L2=[75736]Started Editing.
 D1_L3=[76036]Stopped Editing.
 D1_L4=[76315]Started Editing.
 D1_L5=[76692]Stopped Editing.
-TotalEdit=333
+TotalEdit=334
 TotalDebug=0
 D1_E=2
 D1_D=0
@@ -89,6 +89,22 @@ D3_L19=[58511]Stopped Editing.
 D3_L20=[58962]Started Editing.
 D3_L21=[60908]Stopped Editing.
 D3_L22=[60908]Project Closed.
+D4=23-03-2021
+D4_L=12
+D4_L1=[52311]Project Opened.
+D4_L2=[52481]Started Editing.
+D4_L3=[52795]Stopped Editing.
+D4_L4=[53615]Started Editing.
+D4_L5=[53920]Stopped Editing.
+D4_L6=[53945]Started Editing.
+D4_L7=[53967]Stopped Editing.
+D4_E=1
+D4_D=0
+D4_L8=[53967]Project Closed.
+D4_L9=[57851]Project Opened.
+D4_L10=[57933]Project Closed.
+D4_L11=[58261]Project Opened.
+D4_L12=[60327]Project Closed.
 
 [Opened Files]
 1=externa.c

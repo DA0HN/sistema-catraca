@@ -83,6 +83,7 @@ int liberaUser(){
    delay_ms(500);
    clearD();
 }
+
 void adm(){
    if(modoAdm == 1 && senhaAdm == cadastradoU('0')){
       printf(lcd_escreve, "\f Bem Vindo ADM\n"); 
@@ -90,6 +91,7 @@ void adm(){
       delay_ms(200);
    }
 }
+
 #INT_RB
 void RB_isr(void) 
 {
@@ -120,7 +122,6 @@ void RB_isr(void)
          mostraTela(2);
       }
    }   
-   
    
    if(countSs == 4){
       senhaAdm = liberaUser();
