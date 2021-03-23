@@ -4,6 +4,8 @@
 #define LINHA 16
 #define COLUNA 6
 unsigned char memoriaNull = 0xFF; //FF 
+int lin = 1;
+int col = 0;
 
 unsigned char dados[LINHA][COLUNA]; //matriz que receber os dados da memoria
 
@@ -211,9 +213,18 @@ int status(unsigned char cadastro[4]) //verifica o status atual do cliente
 
 
 
-void recebeDados(char ch, int line, int col){ //recebe os dados via serial e armazena na memoria
-   dados[line][col] = ch;
-   salvaMemoria();
+void recebeDados(char ch){//recebe os dados via serial e armazena na memoria
+   if(ch == 'I'){
+      lin = 1;
+      col = 0;      
+   }else{
+      if(col == 6){
+         col = 0;    
+         lin++;
+      }
+      dados[lin][col++] = ch;
+      salvaMemoria();
+   } 
 }
 
 

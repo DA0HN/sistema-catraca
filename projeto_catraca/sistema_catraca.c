@@ -1,22 +1,15 @@
-#include "tela_util.c"
+#include "lib/tela_util.c"
+
+char a;
 
 #INT_RDA
 void  RDA_isr(void) 
 {      
-   output_toggle(PIN_D0);
-   ch = getc();  
-   if(ch == 'I'){ //inicio de leitura     
-            lin = 1;
-            col = 0;      
-      }else if(ch != 'F'){     //final de leitura               
-            if(col == 6){
-            // ao final da coluna reseta ela e incrementa linha
-               col = 0;    
-               lin++;
-         }  
-
-       recebeDados(ch, lin, col++);
-      }      
+   output_toggle(PIN_D0); 
+   a = getc();
+   if(a != 0x00){
+      recebeDados(a);
+   }
 }
 
 
