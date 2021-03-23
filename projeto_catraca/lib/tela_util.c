@@ -12,11 +12,6 @@ int posicaoSenha = 0;
 int tipoTela = 0;
 int comandoAdmin = 0;
 
-
-int lin = 1;
-int col = 0;
-char ch;
-
 void telaStatus()
 {
    if (status(senha) == 0)

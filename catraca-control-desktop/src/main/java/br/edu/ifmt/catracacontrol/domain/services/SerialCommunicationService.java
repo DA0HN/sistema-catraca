@@ -51,7 +51,6 @@ public class SerialCommunicationService {
     try {
       this.console.appendMessage("I");
       writer.write('I');
-      AtomicInteger cont = new AtomicInteger();
       clients.forEach(client -> {
         try {
           var id = client.getId().toString();
@@ -64,19 +63,13 @@ public class SerialCommunicationService {
             TimeUnit.MILLISECONDS.sleep(550);
             writer.flush();
           }
-          cont.getAndIncrement();
-          if(cont.get() == clients.size()) {
-            this.console.appendMessage("F");
-            writer.write('F');
 
-            TimeUnit.MILLISECONDS.sleep(550);
-            writer.flush();
-          }
         }
         catch(IOException | InterruptedException e) {
           e.printStackTrace();
         }
       });
+      writer.write(0x00);
     }
     catch(IOException e) {
       e.printStackTrace();
