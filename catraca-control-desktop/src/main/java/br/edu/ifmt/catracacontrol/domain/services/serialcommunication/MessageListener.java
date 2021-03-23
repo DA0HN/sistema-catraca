@@ -18,6 +18,8 @@ public class MessageListener implements SerialPortMessageListener {
   private final SerialCommunicationService service;
   private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm:ss");
 
+  private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm:ss");
+
   public MessageListener(Console console, SerialCommunicationService service) {
     this.console = console;
     this.service = service;
@@ -49,7 +51,7 @@ public class MessageListener implements SerialPortMessageListener {
       console.getWriter().flush();
       service.processData(new String(delimitedMessage).split(","));
     }
-    catch(IOException e) {
+    catch(InterruptedException e) {
       e.printStackTrace();
     }
   }
