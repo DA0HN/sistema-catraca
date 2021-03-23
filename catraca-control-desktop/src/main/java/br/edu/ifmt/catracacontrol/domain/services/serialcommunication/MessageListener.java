@@ -9,12 +9,17 @@ import com.fazecast.jSerialComm.SerialPortMessageListener;
 import lombok.Getter;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class MessageListener implements SerialPortMessageListener {
 
   @Getter
   private final Console console;
   private final SerialCommunicationService service;
+
+  private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm:ss");
 
   public MessageListener(Console console, SerialCommunicationService service) {
     this.console = console;
@@ -40,10 +45,15 @@ public class MessageListener implements SerialPortMessageListener {
   public void serialEvent(SerialPortEvent event) {
     try {
       byte[] delimitedMessage = event.getReceivedData();
-      console.getWriter().println("Chegou a mensagem: " + new String(delimitedMessage));
-      console.flush();
+      console.getWriter().print(
+        "[" + formatter.format(LocalDateTime.now()) +
+          "] " +
+          new String(delimitedMessage) + "\n"
+      );
+      console.getWriter().flush();
+      Thread.sleep(600);
     }
-    catch(IOException e) {
+    catch(InterruptedException e) {
       e.printStackTrace();
     }
   }
