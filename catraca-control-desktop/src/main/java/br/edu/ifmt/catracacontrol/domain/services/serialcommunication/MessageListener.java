@@ -1,7 +1,6 @@
 package br.edu.ifmt.catracacontrol.domain.services.serialcommunication;
 
 import br.edu.ifmt.catracacontrol.domain.services.Console;
-import br.edu.ifmt.catracacontrol.domain.services.IClientService;
 import br.edu.ifmt.catracacontrol.domain.services.SerialCommunicationService;
 import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortEvent;
@@ -12,13 +11,14 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class MessageListener implements SerialPortMessageListener {
 
   @Getter
   private final Console console;
   private final SerialCommunicationService service;
-
   private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm:ss");
 
   public MessageListener(Console console, SerialCommunicationService service) {
@@ -43,10 +43,11 @@ public class MessageListener implements SerialPortMessageListener {
 
   @Override
   public void serialEvent(SerialPortEvent event) {
-    byte[] delimitedMessage = event.getReceivedData();
+    var message = event.getReceivedData();
     this.service.getConsole().appendMessage(
       "[" + formatter.format(LocalDateTime.now()) + "] " +
-        new String(delimitedMessage)
+        new String(message)
     );
+    // TODO: Atualizar String reativa para disparar análise
   }
 }

@@ -50,16 +50,17 @@ public class TransferDataController implements Initializable {
 
   @Override public void initialize(URL location, ResourceBundle resources) {
     try {
+      var porta = "COM2";
       this.serialCommunicationService = new SerialCommunicationService(
         Arrays.stream(SerialPort.getCommPorts())
-          .filter(p -> p.getSystemPortName().equals("COM2"))
+          .filter(p -> p.getSystemPortName().equals(porta))
           .findFirst()
           .get(),
         new Console(outputTextArea),
         new ClientService()
       );
       this.serialCommunicationService.getConsole()
-        .appendMessage("Iniciando comunicação serial na porta COM2");
+        .appendMessage("Iniciando comunicação serial na porta " + porta);
       this.serialCommunicationService.openCommunication();
     }
     catch(Exception e) {
