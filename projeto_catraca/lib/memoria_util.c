@@ -42,8 +42,11 @@ int verificaSenha(unsigned char cadastro[4], int linhaDado) //verifica se a senh
 }
 
 int recuperaId() //guarda o ultimo ID para cadastrar o proximo
-{
+{  
    int linhaNula = verificaPosicaoNula();
+   if(linhaNula == 1){
+      return 1;
+   }
    return (1 +dados[linhaNula -1][0]) - '0';
   
 }
@@ -78,18 +81,26 @@ void carregaMemoria() //carrega dados da memoria para a matriz
    }
 }
 
-void enviaDados(){  //envia os dados da matriz via serial
-   for(int i = 0; i < LINHA; i++){
+void enviaDados(){ //envia os dados da matriz via serial
+   fprintf(PORT1, "I\n\r");
+   for(int i = 1; i < LINHA; i++){
+      output_toggle(PIN_D1);
       for(int j = 0; j < COLUNA; j++){
-         if(j == 5){
-            fprintf(PORT1, "%d", dados[i][j] - '0');  
-         }else{       
-            fprintf(PORT1, "%d,", dados[i][j] - '0');             
+         output_toggle(PIN_D2);
+         if(dados[i][j] != memoriaNull){
+            if(j == 5){
+               fprintf(PORT1, "%d\n\r", dados[i][j] - '0');  
+            }else{       
+               fprintf(PORT1, "%d,", dados[i][j] - '0');             
+            }
          }
       }
-      fprintf(PORT1, "\n\r"); 
+    //fprintf(PORT1, "\n\r"); 
       delay_ms(500);
     }
+    fprintf(PORT1, "F\n\r"); 
+    output_low(PIN_D1);
+    output_low(PIN_D2);
 }
 
 
@@ -156,7 +167,8 @@ void configuracaoMemoria() // faz as configuracoes iniciais da memoria
 {
    if (dados[0][2] == memoriaNull)
    {
-      //senha do admin
+      dados[0][0] = '-';
+      dados[0][1] = '-';
       dados[0][2] = '0';
       dados[0][3] = '0';
       dados[0][4] = '0';

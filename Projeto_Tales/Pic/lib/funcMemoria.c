@@ -7,6 +7,8 @@ void init_m(){
    delay_ms(10);
 }
 
+//Mensagem de erro padrão é 42
+
 void loadM(){ //ok
  int count = 0;
  for(int i = 0;i<16;i++){
