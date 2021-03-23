@@ -246,7 +246,7 @@ void main()
 { 
    
    init_ext_eeprom();
-  apagaMemoria();
+   //apagaMemoria();
    carregaMemoria();
    configuracaoMemoria();
    output_low(PIN_D0);

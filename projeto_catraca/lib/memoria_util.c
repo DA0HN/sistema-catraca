@@ -86,10 +86,15 @@ void enviaDados(){  //envia os dados da matriz via serial
          }else{       
             fprintf(PORT1, "%d,", dados[i][j] - '0');             
          }
+         delay_ms(500);
+         output_toggle(PIN_D0);
       }
       fprintf(PORT1, "\n\r"); 
-      delay_ms(500);
+      output_toggle(PIN_D1);
+      delay_ms(800);
     }
+    output_low(PIN_D1);
+    output_low(PIN_D0);
 }
 
 
