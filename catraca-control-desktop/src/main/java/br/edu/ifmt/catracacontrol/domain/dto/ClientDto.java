@@ -9,10 +9,10 @@ import javafx.beans.property.StringProperty;
 import lombok.Getter;
 
 public class ClientDto {
-  @Getter private LongProperty id;
-  @Getter private StringProperty name;
-  @Getter private StringProperty password;
-  @Getter private StringProperty status;
+  private LongProperty id;
+  private StringProperty name;
+  private StringProperty password;
+  private StringProperty status;
 
   public ClientDto() {
     this.id = new SimpleLongProperty();
@@ -35,8 +35,55 @@ public class ClientDto {
     client.setId(this.id.get());
     client.setName(this.name.get());
     client.setPassword(this.password.get());
-    client.setStatus(Status.valueOf(this.getStatus().get()));
+    client.setStatus(Status.valueOf(this.getStatus()));
     return client;
   }
 
+  public Long getId() {
+    return id.get();
+  }
+
+  public LongProperty idProperty() {
+    return id;
+  }
+
+  public void setId(long id) {
+    this.id.set(id);
+  }
+
+  public String getName() {
+    return name.get();
+  }
+
+  public StringProperty nameProperty() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name.set(name);
+  }
+
+  public String getPassword() {
+    return password.get();
+  }
+
+  public StringProperty passwordProperty() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password.set(password);
+  }
+
+  public String getStatus() {
+    return status.get();
+  }
+
+  public StringProperty statusProperty() {
+    return status;
+  }
+
+  public void setStatus(String status) {
+    this.status.set(status);
+  }
 }
