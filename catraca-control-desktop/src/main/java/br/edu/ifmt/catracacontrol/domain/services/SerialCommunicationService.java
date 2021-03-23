@@ -5,11 +5,11 @@ import br.edu.ifmt.catracacontrol.domain.models.Status;
 import br.edu.ifmt.catracacontrol.domain.services.serialcommunication.MessageListener;
 import br.edu.ifmt.catracacontrol.domain.services.serialcommunication.WriterListener;
 import com.fazecast.jSerialComm.SerialPort;
+import javafx.beans.property.SimpleStringProperty;
 import lombok.Getter;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.StringJoiner;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -49,44 +49,45 @@ public class SerialCommunicationService {
     var clients = this.clientService.findAll();
     var writer = this.serialPort.getOutputStream();
     try {
-      console.getWriter().println('I');
+      this.console.appendMessage("I");
       writer.write('I');
+      AtomicInteger cont = new AtomicInteger();
+      clients.forEach(client -> {
+        try {
+          var id = client.getId().toString();
+          var status = client.getStatus() == null ? client.getStatus().getCode().toString() : 0;
+          var password = client.getPassword();
+          String data = id + status + password;
+          this.console.appendMessage(data);
+          for(var ch : data.toCharArray()) {
+            writer.write(ch);
+            TimeUnit.MILLISECONDS.sleep(550);
+            writer.flush();
+          }
+          cont.getAndIncrement();
+          if(cont.get() == clients.size()) {
+            this.console.appendMessage("F");
+            writer.write('F');
+
+            TimeUnit.MILLISECONDS.sleep(550);
+            writer.flush();
+          }
+        }
+        catch(IOException | InterruptedException e) {
+          e.printStackTrace();
+        }
+      });
     }
     catch(IOException e) {
       e.printStackTrace();
     }
-    AtomicInteger cont = new AtomicInteger();
-    clients.forEach(client -> {
-      try {
-        var id = client.getId().toString();
-        var status = client.getStatus() == null ? client.getStatus().getCode().toString() : 0;
-        var password = client.getPassword();
-        String data = id + status + password;
-        console.getWriter().println(data);
-        for(var ch : data.toCharArray()) {
-          writer.write(ch);
-          TimeUnit.MILLISECONDS.sleep(750);
-          writer.flush();
-        }
-        cont.getAndIncrement();
-        if(cont.get() == clients.size()) {
-          console.getWriter().println('F');
-          writer.write('F');
-
-          TimeUnit.MILLISECONDS.sleep(750);
-          writer.flush();
-        }
-      }
-      catch(IOException | InterruptedException e) {
-        e.printStackTrace();
-      }
-    });
   }
 
+  // TODO: adicionar binding reativo (ver classe Console)
   public void processData(String[] data) throws IOException {
     try {
       if(Arrays.stream(data).allMatch(s -> s.equals("-49"))) {
-        console.getWriter().println("Linha em branco!");
+        this.console.appendMessage("Linha em branco!");
         return;
       }
 
@@ -104,10 +105,10 @@ public class SerialCommunicationService {
       client.setPassword(password);
       client.setStatus(Status.fromCode(Integer.parseInt(status)));
       clientService.save(client);
+      this.console.appendMessage("O Cliente " + client.getPassword() + " foi armazenado.");
     }
     catch(ServiceException e) {
-      console.getWriter().println(e.getMessage());
-      console.getWriter().flush();
+      this.console.appendMessage(e.getMessage());
     }
   }
 }

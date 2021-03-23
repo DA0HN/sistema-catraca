@@ -9,7 +9,10 @@ import lombok.Getter;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class MessageListener implements SerialPortMessageListener {
 
@@ -40,17 +43,11 @@ public class MessageListener implements SerialPortMessageListener {
 
   @Override
   public void serialEvent(SerialPortEvent event) {
-    try {
-      byte[] delimitedMessage = event.getReceivedData();
-      console.getWriter().println(
-        "[" + formatter.format(LocalDate.now()) + "] " +
-          "Chegou a mensagem: " + new String(delimitedMessage)
-      );
-      console.getWriter().flush();
-      service.processData(new String(delimitedMessage).split(","));
-    }
-    catch(IOException e) {
-      e.printStackTrace();
-    }
+    var message = event.getReceivedData();
+    this.service.getConsole().appendMessage(
+      "[" + formatter.format(LocalDateTime.now()) + "] " +
+        new String(message)
+    );
+    // TODO: Atualizar String reativa para disparar análise
   }
 }
