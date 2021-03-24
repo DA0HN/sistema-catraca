@@ -142,8 +142,11 @@ void telaExcluir()
    }
    if (tmp == 'D')
    {
-      excluiUsuario(senha);
-      printf(lcd_escreve, "\fExclusao Realizada");
+      if(excluiUsuario(senha)== 1){
+          printf(lcd_escreve, "\fExclusao Realizada");
+      }else {
+         printf(lcd_escreve, "\f Senha invalida!! "); 
+      }
       delay_ms(2000);
       limpaSenha();
       tipoTela = 0;
@@ -168,8 +171,10 @@ void telaVerificar()
    {
       if(status(senha) == 1){
          printf(lcd_escreve, "\f  Mensalidade\n\r      Paga");
-      }else{
+      }else  if(status(senha) == 0){
          printf(lcd_escreve, "\f Mensalidade\n\r  Nao Paga");
+      }else{
+          printf(lcd_escreve, "\f Senha invalida!! "); 
       }
       delay_ms(2000);
       limpaSenha();
@@ -191,8 +196,12 @@ void pagarMensal(){
    }
    if (tmp == 'D')
    {
-      alteraStatus(senha);
-      printf(lcd_escreve, "\f   Pagamento\n\r   Realizado");
+      if(alteraStatus(senha) == 1){
+         printf(lcd_escreve, "\f   Pagamento\n\r   Realizado");
+        
+      }else{
+          printf(lcd_escreve, "\f Senha invalida!! "); 
+      }
       delay_ms(2000);
       limpaSenha();
       tipoTela = 0;

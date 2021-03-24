@@ -6,7 +6,6 @@
 unsigned char memoriaNull = 0xFF; //FF 
 int lin = 1;
 int col = 0;
-int contador = 6;
 
 unsigned char dados[LINHA][COLUNA]; //matriz que receber os dados da memoria
 
@@ -153,17 +152,20 @@ void novoUsuario(unsigned char cadastro[4]) // cria um novo usuario e atualiza a
    salvaMemoria();
 }
 
-void excluiUsuario(unsigned char cadastro[4]) // exclui um usuario e atualiza a memoria
+int excluiUsuario(unsigned char cadastro[4]) // exclui um usuario e atualiza a memoria
 { //exclui um usuario da memoria
    for (int i = 1; i < LINHA; i++)
    {
       if (verificaSenha(cadastro, i))
       {
          apagaColunaMemoria(i);
-      }
+         salvaMemoria();
+         return 1;
    }
-   salvaMemoria();
-}
+      }
+      return 0;
+   }
+   
 
 
 void configuracaoMemoria() // faz as configuracoes iniciais da memoria
@@ -180,7 +182,8 @@ void configuracaoMemoria() // faz as configuracoes iniciais da memoria
    }
 }
 
-void alteraStatus(unsigned char cadastro[4]) // altera os status do cliente quando entra/sai na catraca
+
+int alteraStatus(unsigned char cadastro[4]) // altera os status do cliente quando entra/sai na catraca
 {
    for (int i = 1; i < LINHA; i++)
    {
@@ -195,9 +198,10 @@ void alteraStatus(unsigned char cadastro[4]) // altera os status do cliente quan
             dados[i][1] = 0 + '0';
          }
          salvaMemoria();
-         return;
+         return 1;
       }
    }
+   return 0;
 }
 
 int status(unsigned char cadastro[4]) //verifica o status atual do cliente
@@ -221,25 +225,24 @@ void resetaArray(){
       }
    }
 }
+int cont = 6;
 
-
-void salvaMemoriaSerial(char ch) //salva todos os dados alterados na memoria
-{  
-      
-
-     write_ext_eeprom(contador++, (int)ch);
-}
-
-
-void recebeDados(char ch){//recebe os dados via serial e armazena na memoria
+void recebeDados(int ch){//recebe os dados via serial e armazena na memoria
    if(ch == 'I'){
+      cont = 6;
       //resetaArray();
-     // lin = 1;
-     // col = 0;
-     contador = 6;
+      //lin = 1;
+      //col = 0;
       return;
    }
-      salvaMemoriaSerial(ch);  
+      //if(col == 6){
+        // col = 0;    
+        // lin++;
+     // }
+      write_ext_eeprom(cont++, ch);
+      //dados[lin][col++] = ch;
+      //salvaMemoria();
+   
 }
 
 

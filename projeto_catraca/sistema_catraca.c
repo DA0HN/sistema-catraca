@@ -1,6 +1,6 @@
 #include "lib/tela_util.c"
 
-char a;
+int a;
 
 #INT_RDA
 void  RDA_isr(void) 

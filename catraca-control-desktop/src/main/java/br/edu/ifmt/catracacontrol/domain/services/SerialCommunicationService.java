@@ -60,13 +60,17 @@ public class SerialCommunicationService {
       writer.write('I');
       clients.forEach(client -> {
         try {
-          var id = client.getId().toString();
+          var id = client.getId().intValue();
           var status = client.getStatus() == null ? client.getStatus().getCode().toString() : 0;
           var password = client.getPassword();
 
-          String data = id + status + password;
+          writer.write(id);
+          TimeUnit.MILLISECONDS.sleep(550);
+          writer.flush();
 
-          this.console.printWithTime(data + "\n");
+          String data =  status + password;
+
+          this.console.printWithTime(id + data + "\n");
 
           for(var ch : data.toCharArray()) {
             writer.write(ch);
