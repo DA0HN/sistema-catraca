@@ -20,6 +20,9 @@ public class SerialCommunicationService {
   @Getter private final SerialPort serialPort;
   @Getter private final Console console;
 
+  private final Integer passwordBegin = 2;
+  private final Integer passwordEnd = passwordBegin + 4;
+
   @Getter private final SimpleStringProperty message = new SimpleStringProperty();
 
   public SerialCommunicationService(SerialPort serialPort, Console console, IClientService clientService) {
@@ -35,7 +38,6 @@ public class SerialCommunicationService {
     serialPort.addDataListener(new WriterListener(console));
 
     message.addListener((observable, oldValue, newValue) -> {
-      System.out.println(newValue);
       processData(newValue.split(","));
     });
 
@@ -68,9 +70,9 @@ public class SerialCommunicationService {
           TimeUnit.MILLISECONDS.sleep(550);
           writer.flush();
 
-          String data =  status + password;
+          String data = status + password;
 
-          this.console.printWithTime(id + data + "\n");
+          this.console.printWithTime("Enviando: " + id + data + "\n");
 
           for(var ch : data.toCharArray()) {
             writer.write(ch);
@@ -102,19 +104,29 @@ public class SerialCommunicationService {
       }
 
       if(String.join("", data).equals("update")) {
+        this.console.printWithTime("Pedido de sincronização!\n");
         this.updatePIC();
         return;
       }
 
       var id = data[0];
-      var status = data[1];
-      var password = String.join("", asList(data).subList(2, data.length));
+      var status = data[1] == null ? "0" : data[1];
+      var password = String.join("",
+                                 asList(data).subList(this.passwordBegin, this.passwordEnd)
+      );
+      StringBuilder temp = new StringBuilder();
+      for(char p : password.toCharArray()) {
+        temp.append((int) p);
+      }
+      this.console.printWithTime("Recebido: " + temp.toString() + "\n");
 
       var client = new Client();
       client.setPassword(password);
       client.setStatus(Status.fromCode(Integer.parseInt(status)));
+
+      this.console.printWithTime("O Cliente " + client.getPassword() + " será armazenado.\n");
+
       clientService.save(client);
-      this.console.printWithTime("O Cliente " + client.getPassword() + " foi armazenado.\n");
     }
     catch(ServiceException e) {
       this.console.printWithTime(e.getMessage() + "\n");
