@@ -36,7 +36,14 @@ void consultaM(int x){ //ok // X é o referencial da matriz
       printf(lcd_escreve,"%c",dados[x][y]);
    }   
 }
-
+//Fazer if do erro
+char consultaVetor(int x){
+   char temp[6];
+   for(int a = 0;a<6;a++){
+      temp[a] = dados[x][a];
+   }
+   return temp;
+}
 int cadastradoU(unsigned char user[1]){
    for(int i = 0;i<16;i++){
       if (user[0] == dados[i][0]){
@@ -82,6 +89,15 @@ int verificaS(unsigned char senha[4]){ //ok
    return 42;
 }
 
+int verificaC(char cadastro){ //ok
+   for(int i = 0;i<16;i++){
+      if (cadastro == dados[i][0]){
+         return i;
+      }
+   }
+   return 42;
+}
+
 void apagaM(int pos){
    for(int i=0;i<6;i++){
       dados[pos][i] = '-';
@@ -104,3 +120,7 @@ unsigned char valorM(int x,int y){
    return valor;
 }
 
+void mudarValorM(int x, int y, char valor){
+   dados[x][y] = valor;
+   saveM();
+}
