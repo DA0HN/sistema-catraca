@@ -58,19 +58,28 @@ public class SerialCommunicationService {
     var writer = this.serialPort.getOutputStream();
     try {
       writer.write('I');
+      writer.flush();
       clients.forEach(client -> {
         try {
-          var id = client.getId().toString();
-          var status = client.getStatus() == null ? client.getStatus().getCode().toString() : 0;
+          var id = client.getId().byteValue() & 0xFF;
+          var status = (client.getStatus() == null ? client.getStatus().getCode() : 0) & 0xFF;
           var password = client.getPassword();
-          String data = id + "?" + status + password;
-//          String data = String.join("?", id, status.toString(), password);
-          this.console.println(data);
-          for(var ch : data.toCharArray()) {
-            writer.write(ch);
+
+          writer.write(id);
+          writer.flush();
+          writer.write(status);
+          writer.flush();
+
+          StringBuilder msg = new StringBuilder(
+            String.format("%02X %02X ", id, status));
+
+          for(var ch : password.toCharArray()) {
+            msg.append(String.format("%02X ", (ch & 0xFF)));
+            writer.write(ch & 0xFF);
             TimeUnit.MILLISECONDS.sleep(550);
             writer.flush();
           }
+          this.console.printWithTime(msg.toString() + "\n");
         }
         catch(IOException | InterruptedException e) {
           e.printStackTrace();
@@ -86,12 +95,12 @@ public class SerialCommunicationService {
   public void processData(String[] data) {
     try {
       if(Arrays.stream(data).allMatch(s -> s.equals("-49"))) {
-        this.console.println("Linha em branco!\n");
+        this.console.printWithTime("Linha em branco!\n");
         return;
       }
 
       if(asList(data).contains("-")) {
-        this.console.println(Arrays.toString(data) + " mensagem estranha...\n");
+        this.console.printWithTime(Arrays.toString(data) + " mensagem estranha...\n");
         return;
       }
 
@@ -108,10 +117,10 @@ public class SerialCommunicationService {
       client.setPassword(password);
       client.setStatus(Status.fromCode(Integer.parseInt(status)));
       clientService.save(client);
-      this.console.println("O Cliente " + client.getPassword() + " foi armazenado.\n");
+      this.console.printWithTime("O Cliente " + client.getPassword() + " foi armazenado.\n");
     }
     catch(ServiceException e) {
-      this.console.println(e.getMessage() + "\n");
+      this.console.printWithTime(e.getMessage() + "\n");
     }
   }
 }
