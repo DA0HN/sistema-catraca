@@ -47,6 +47,9 @@ void RB_isr(void)
         delay_ms(2000);
         printf(lcd_escreve, "\fDados Enviados");
         delay_ms(1000);
+      } 
+      else if (tipoTela == 6){
+         pagarMensal();
       }
    clear_interrupt(INT_RB);
    enable_interrupts(INT_RB);

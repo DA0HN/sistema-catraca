@@ -14,18 +14,18 @@ int comandoAdmin = 0;
 
 void telaStatus()
 {
-   if (status(senha) == 0)
+   if (status(senha) == 1)
    {
-      printf(lcd_escreve, "\f   Bem Vindo! ");
+      printf(lcd_escreve, "\f   Liberado! ");
+      output_high(PIN_C0);
+      delay_ms(2000);
+      output_low(PIN_C0);
    }
    else
    {
-      printf(lcd_escreve, "\f  Volte Sempre! ");
+      printf(lcd_escreve, "\fProcure o admin ");
+      delay_ms(2000);
    }
-   output_high(PIN_C0);
-   alteraStatus(senha);
-   delay_ms(2000);
-   output_low(PIN_C0);
 }
 
 void limpaSenha()
@@ -35,8 +35,8 @@ void limpaSenha()
 
 void telaPrincipal()
 {
-   printf(lcd_escreve, "\f Academia C & G\n");
-   printf(lcd_escreve, "\r  Senha: %s", senha);
+   printf(lcd_escreve, "\f Academia C & G\n\r");
+   printf(lcd_escreve, "  Senha: %s", senha);
 
    if (tmp == 255)
       return;
@@ -74,7 +74,7 @@ void telaPrincipal()
 
 void telaCrudAdmin()
 {
-   printf(lcd_escreve, "\f1-Inc   2-Exc\n\r3-Verif  4-Atul");
+   printf(lcd_escreve, "\f1-Inc 2-Exc 3-Pg\n\r4-Verif  5-Atul");
    if (tmp == 255)
       return;
    comandoAdmin = tmp - '0';
@@ -88,12 +88,17 @@ void telaCrudAdmin()
       printf(lcd_escreve, "\fExcluir Pessoa");
       tipoTela = 3;
    }
-   else if (comandoAdmin == 3)
+    else if (comandoAdmin == 3)
+   {
+      printf(lcd_escreve, "\f   Pagamento\n\r     Mensal");
+      tipoTela = 6;
+   }
+   else if (comandoAdmin == 4)
    {
       printf(lcd_escreve, "\fVerifica Pessoa");
       tipoTela = 4;
    }
-   else if (comandoAdmin == 4)
+   else if (comandoAdmin == 5)
    {
       printf(lcd_escreve, "\fEnvia Dados \n\rp/ Computador");
       tipoTela = 5;
@@ -161,11 +166,33 @@ void telaVerificar()
    }
    if (tmp == 'D')
    {
-      if(verificaUsuario(senha) == 0){
-         printf(lcd_escreve, "\fUsuario Valido");
+      if(status(senha) == 1){
+         printf(lcd_escreve, "\f  Mensalidade\n\r      Paga");
       }else{
-         printf(lcd_escreve, "\fUsuario Invalido");
+         printf(lcd_escreve, "\f Mensalidade\n\r  Nao Paga");
       }
+      delay_ms(2000);
+      limpaSenha();
+      tipoTela = 0;
+   }
+   else
+   {
+      senha[posicaoSenha++] = tmp;
+   }
+}
+
+void pagarMensal(){
+   printf(lcd_escreve, "\fInf. p/ pagar\n\rSenha: %s", senha);
+   if (tmp == 255)
+      return;
+   if (posicaoSenha == 4)
+   {
+      posicaoSenha = 0;
+   }
+   if (tmp == 'D')
+   {
+      alteraStatus(senha);
+      printf(lcd_escreve, "\f   Pagamento\n\r   Realizado");
       delay_ms(2000);
       limpaSenha();
       tipoTela = 0;
