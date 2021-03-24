@@ -56,6 +56,8 @@ void telaPrincipal()
       }
       else if (usuario == 1)
       {
+         printf(lcd_escreve, "\fBem Vindo Admin!");
+         delay_ms(2000);
          tipoTela = 1;
       }
       else

@@ -24,7 +24,7 @@ void salvaMemoria() //salva todos os dados alterados na memoria
 
 int verificaPosicaoNula() //verifica se existe posicoes nulas para cadastro
 { 
-   for (int i = 1; i < LINHA; i++)
+   for (int i = 0; i < LINHA; i++)
    {
       if (dados[i][0] == memoriaNull)
       {
@@ -46,10 +46,10 @@ int verificaSenha(unsigned char cadastro[4], int linhaDado) //verifica se a senh
 int recuperaId() //guarda o ultimo ID para cadastrar o proximo
 {  
    int linhaNula = verificaPosicaoNula();
-   if(linhaNula == 1){
-      return 1;
+   if(linhaNula == 0){
+      return 1 + '0';
    }
-   return (1 +dados[linhaNula -1][0]) - '0';
+   return (1 +dados[linhaNula -1][0] + '0');
   
 }
 
@@ -59,15 +59,6 @@ void apagaColunaMemoria(int linhaDado) //apaga um usuario definido por linha
    {
       dados[linhaDado][j] = memoriaNull;
    }
-}
-
-void apagaMemoria() //apaga todos os dados da memoria
-{ 
-   for (int i = 0; i < LINHA; i++)
-   {
-      apagaColunaMemoria(i);
-   }
-   salvaMemoria();
 }
 
 void carregaMemoria() //carrega dados da memoria para a matriz 
@@ -83,9 +74,19 @@ void carregaMemoria() //carrega dados da memoria para a matriz
    }
 }
 
+void apagaMemoria() //apaga todos os dados da memoria
+{ 
+   int16 cont = 0;
+   while(cont < 512)
+   {
+      write_ext_eeprom(cont++, memoriaNull);
+   }
+   carregaMemoria();
+}
+
 void enviaDados(){ //envia os dados da matriz via serial
    fprintf(PORT1, "I\n\r");
-   for(int i = 1; i < LINHA; i++){
+   for(int i = 0; i < LINHA; i++){
       output_toggle(PIN_D1);
       for(int j = 0; j < COLUNA; j++){
          output_toggle(PIN_D2);
@@ -110,13 +111,11 @@ void enviaDados(){ //envia os dados da matriz via serial
 
 int verificaUsuario(unsigned char cadastro[4]) // verifica se o usuario e um admin, cliente ou nao existe
 {
-   if (verificaSenha(cadastro, 0))
-   {
-      printf(lcd_escreve, "\fBem Vindo Admin!");
-      delay_ms(2000);
+   
+   if((cadastro[0] == '0') && (cadastro[1] =='0') && (cadastro[2] == '0') && (cadastro[3] == '0')){    
       return 1;
    }
-   for (int i = 1; i < LINHA; i++)
+   for (int i = 0; i < LINHA; i++)
    {
       if (verificaSenha(cadastro, i))
       {
@@ -128,8 +127,9 @@ int verificaUsuario(unsigned char cadastro[4]) // verifica se o usuario e um adm
 
 void novoUsuario(unsigned char cadastro[4]) // cria um novo usuario e atualiza a memoria
 { //cadastras um novo usuario na memoria
+   carregaMemoria();
    int posicaoLinha = verificaPosicaoNula();
-   dados[posicaoLinha][0] = recuperaId() + '0'; //id do usuario
+   dados[posicaoLinha][0] = recuperaId() ; //id do usuario
    dados[posicaoLinha][1] = '1';                //status
 
    if (posicaoLinha == (-1))
@@ -155,7 +155,7 @@ void novoUsuario(unsigned char cadastro[4]) // cria um novo usuario e atualiza a
 
 int excluiUsuario(unsigned char cadastro[4]) // exclui um usuario e atualiza a memoria
 { //exclui um usuario da memoria
-   for (int i = 1; i < LINHA; i++)
+   for (int i = 0; i < LINHA; i++)
    {
       if (verificaSenha(cadastro, i))
       {
@@ -165,28 +165,12 @@ int excluiUsuario(unsigned char cadastro[4]) // exclui um usuario e atualiza a m
    }
       }
       return 0;
-   }
-   
-
-
-void configuracaoMemoria() // faz as configuracoes iniciais da memoria
-{
-   if (dados[0][2] == memoriaNull)
-   {
-      dados[0][0] = '-';
-      dados[0][1] = '-';
-      dados[0][2] = '0';
-      dados[0][3] = '0';
-      dados[0][4] = '0';
-      dados[0][5] = '0';
-      salvaMemoria();
-   }
 }
-
+   
 
 int alteraStatus(unsigned char cadastro[4]) // altera os status do cliente quando entra/sai na catraca
 {
-   for (int i = 1; i < LINHA; i++)
+   for (int i = 0; i < LINHA; i++)
    {
       if (verificaSenha(cadastro, i))
       {
@@ -207,7 +191,7 @@ int alteraStatus(unsigned char cadastro[4]) // altera os status do cliente quand
 
 int status(unsigned char cadastro[4]) //verifica o status atual do cliente
 {
-   for (int i = 1; i < LINHA; i++)
+   for (int i = 0; i < LINHA; i++)
    {
       if (verificaSenha(cadastro, i))
       {
@@ -220,36 +204,26 @@ int status(unsigned char cadastro[4]) //verifica o status atual do cliente
 
 
 void resetaArray(){
-   for (int i = 1; i < LINHA; i++){
+   for (int i = 0; i < LINHA; i++){
        for (int j = 0; j < COLUNA; j++){
          dados[lin][col++] = memoriaNull;
       }
    }
 }
-int cont = 6;
+int cont = 0;
 
 void recebeDados(int ch){//recebe os dados via serial e armazena na memoria
    if(ch == 'I'){
-      cont = 6;
-      //resetaArray();
-      //lin = 1;
-      //col = 0;
+      cont = 0;
       return;
    }
-      //if(col == 6){
-        // col = 0;    
-        // lin++;
-     // }
       if((cont % 6) == 0){
          write_ext_eeprom(cont++, ((char)ch + '0'));
       }else{
          write_ext_eeprom(cont++, ch);
       }   
       resetaArray();
-      carregaMemoria();
-      //dados[lin][col++] = ch;
-      //salvaMemoria();
-   
+      carregaMemoria();   
 }
 
 

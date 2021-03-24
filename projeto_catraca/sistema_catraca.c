@@ -12,13 +12,11 @@ void  RDA_isr(void)
    }
 }
 
-
 #INT_RB
 void RB_isr(void)
 {
    disable_interrupts(INT_RB);
    clear_interrupt(INT_RB);
-
    tmp = tc_tecla();
    if (tipoTela == 0)
       {
@@ -57,11 +55,8 @@ void RB_isr(void)
 
 void main()
 { 
-   
    init_ext_eeprom();
    apagaMemoria();
-   carregaMemoria();
-   configuracaoMemoria();
    output_low(PIN_D0);
    lcd_ini();
    delay_ms(10);
@@ -79,9 +74,4 @@ void main()
    output_low(PIN_B1);
    output_low(PIN_B2);
    output_low(PIN_B3);
-
-   while (TRUE)
-   {    
-      
-   }
 }
