@@ -29,68 +29,117 @@
 //#use rs232(baud=9600, xmit=PIN_C6, rcv=PIN_C7, Serial)
 
 unsigned char tmp;
-int countSs = 0;
+char lt = '-';
+int passoSenha = 0, passoCadastro = 0, passo = 0;
 unsigned char senhaDigitada[] = {'-','-','-','-'};
-int modoAdm = 42, senhaAdm = 43;
+unsigned char cadastro[] = {'-','-','-','-','-','-'};
+int modoAdm = 42, usuarioSenha = 43, menuAdm = 5, modo = 0;
+
 void clearD(){
-   countSs = 0;
+   passoSenha = 0;
    senhaDigitada[0] = senhaDigitada[1] = senhaDigitada[2] = senhaDigitada[3] = '-';
 }
-int msgTela[] = {0,1,0,0};
-void mostraTela(int mostra){
-   if(mostra == 1){
-      if(msgTela[0] == 1){
-         printf(lcd_escreve, "\f ControleEntrada\n"); 
-         printf(lcd_escreve, "\r  Senha: %s", senhaDigitada);
-         msgTela[0] = 0;
-         msgTela[1] = 1;
-         
-      }
-   }else if(mostra == 2){
-      if(msgTela[1] == 1){
-         printf(lcd_escreve, "\f    Academia\n"); 
-         printf(lcd_escreve, "\r Dig sua Senha");
-         msgTela[1] = 0;
-         msgTela[0] = 1;
-      }
-   }else if(mostra == 3){
-      if(msgTela[2] == 1){
-         printf(lcd_escreve, "\f    ADM\n"); 
-         printf(lcd_escreve, "\r Dig sua Senha");
-         msgTela[2] = 0;
-      }
-   }else if(mostra == 4){
-      if(msgTela[3] == 1){
-         printf(lcd_escreve, "\f Bem Vindo ADM\n"); 
-         printf(lcd_escreve, "\r Digite a opcao");
-         msgTela[3] = 0;
-      }
-   }
-}
+
 int liberaUser(){
    delay_ms(100);
    int selecionado = verificaS(senhaDigitada);
    if(selecionado!=42){
-      printf(lcd_escreve,"\f Liberado!\n");
-      printf(lcd_escreve,"\r Usuario: %c",valorM(selecionado,0));
+      if(valorM(selecionado,1) == '0'){
+        printf(lcd_escreve,"\f Bem Vindo!\n");
+        mudarValorM(selecionado,1,'1');
+      }else{
+        printf(lcd_escreve,"\f Ate breve!\n");
+        mudarValorM(selecionado,1,'0');
+      }
       return valorM(selecionado,0);
    }else{
       printf(lcd_escreve," \f Desconhecido!\n");
       printf(lcd_escreve," \r Bloqueado!\n");
       return 42;
    }   
-   msgTela[3] = 0;
-   delay_ms(500);
    clearD();
 }
 
-void adm(){
-   if(modoAdm == 1 && senhaAdm == cadastradoU('0')){
-      printf(lcd_escreve, "\f Bem Vindo ADM\n"); 
-      printf(lcd_escreve, "\r Digite a opcao");
-      delay_ms(200);
+void lcdMSG(int msg){
+   switch (msg){
+      case 1:
+         printf(lcd_escreve," \f Digite a Senha:!\n");
+         printf(lcd_escreve," \r Senha: ");
+         printf(lcd_escreve,senhaDigitada);
+         break;
+      case 2:
+         printf(lcd_escreve," \f Academia IFMT\n");
+         printf(lcd_escreve," \r Digite a senha! ");
+         break;
+      case 3:
+         printf(lcd_escreve," \f     Modo ADM");
+         printf(lcd_escreve," \r Digite a senha! ");
+         break;
+      case 4:
+         printf(lcd_escreve," \f Acesso ADM\n");
+         printf(lcd_escreve," \r # Mostra Menu");
+         break;
+      case 5:
+         printf(lcd_escreve," \f A: Cadastro\n");
+         printf(lcd_escreve," \r B: Excluir ");
+         menuAdm = 6;
+         break;
+      case 6:
+         printf(lcd_escreve," \f C: Verifica\n");
+         printf(lcd_escreve," \r D: EnviaPC ");
+         menuAdm = 7;
+         break;
+       case 7:
+         printf(lcd_escreve," \f *: Sair");
+         menuAdm = 5;
+         break;
+       case 8:
+         printf(lcd_escreve," \f Cadastro\n");
+         printf(lcd_escreve," \r D: EnviaPC ");
+         break;
+      case 9:
+         printf(lcd_escreve," \f Digite Cadastro!\n");
+         printf(lcd_escreve," \r Dados: ");
+         printf(lcd_escreve,cadastro);
+         break;
+      case 10:
+         printf(lcd_escreve," \f Cadastro:");
+         printf(lcd_escreve,cadastro);
+         printf(lcd_escreve," \r A: Sim #: Nao ");
+         break;
+      case 11:
+         printf(lcd_escreve," \f Excluir Cadastro!\n");
+         printf(lcd_escreve," \r Codigo: ");
+         printf(lcd_escreve,lt);
+         break;
+      case 12:
+         printf(lcd_escreve," \f Cadastro:");
+         for(int a = 0;a<6;a++){
+            cadastro[a] = valorM(verificaC(lt),a);
+         } 
+         printf(lcd_escreve,cadastro);
+         printf(lcd_escreve," \r A: Sim #: Nao ");
+         break;
+      case 13:
+         printf(lcd_escreve," \f Verifica Cadastro!\n");
+         printf(lcd_escreve," \r Codigo: ");
+         printf(lcd_escreve,lt);
+         break; 
+      case 14:
+         printf(lcd_escreve," \f Verifica Senha!\n");
+         printf(lcd_escreve," \r Senha: ");
+         printf(lcd_escreve,senhaDigitada);
+         break;
+      case 15:
+         printf(lcd_escreve," \f A: Senha\n");
+         printf(lcd_escreve," \r B: Codigo ");
+         break; 
+      default:
+      
+         break; 
    }
 }
+
 
 #INT_RB
 void RB_isr(void) 
@@ -101,33 +150,103 @@ void RB_isr(void)
     tmp = tc_tecla();
  
    if(tmp!= 255){   
-      if(tmp == '*'){
+      if(tmp == '*' && modoAdm == 42){
          modoAdm = 1;
-         msgTela[2] = 1;
-         mostraTela(3);
-      }else{
-         senhaDigitada[countSs] = tmp;
-         countSs++;
-         delay_ms(50);
+         lcdMSG(3);
+      }else if(tmp == '#' && modoAdm == 2){
+         lcdMSG(menuAdm);
+      }else if(tmp == '*' && modoAdm == 2){
+         modoAdm = 42;
+         modo = 0;
+         
+      }else if(tmp == 'A' && modoAdm == 2){ //Menus A
+         modo = 1;
+         modoAdm = 3;
+         lcdMSG(9);
+      }else if(tmp == 'B' && modoAdm == 2){ //Menu B
+         modo = 2;
+         modoAdm = 4;
+         lcdMSG(11);
+       
+      }else if(tmp == 'C' && modoAdm == 2){ //Menu C
+         modoAdm = 5;
+         lcdMSG(15);
+         
+      }else if(tmp == 'A' && modoAdm == 3){ //Opção do Menu A -> A
+         novoCM(cadastro);
+         modoAdm = 2;
+         lcdMSG(4); 
+      }else if(tmp == '#' && modoAdm == 3){ //Opção do Menu A -> #
+         for(int a = 0;a<5;a++){
+            cadastro[a] = '-';
+         }           
+         modoAdm = 2;
+         lcdMSG(4); 
+      }else if(tmp == 'A' && modoAdm == 4){ //Opção do Menu B -> A
+         apagaM(verificaC(lt));
+         modoAdm = 2;
+         lcdMSG(4); 
+      }else if(tmp == '#' && modoAdm == 4){ //Opção do Menu B -> #
+         for(int a = 0;a<5;a++){
+            cadastro[a] = '-';
+         }
+         modoAdm = 2;
+         lcdMSG(4); 
+      }else if(tmp == 'A' && modoAdm == 5){ //Opção do Menu C -> A 
+         modo = 4;
+         lcdMSG(14);
+      }else if(tmp == 'B' && modoAdm == 5){ //Opção do Menu C -> B
+         lcdMSG(13);
+         modo = 3;
+      }else if(tmp == '#' && modoAdm == 5){ //Opção do Menu C -> Voltar
+         modoAdm = 2;
+         lcdMSG(4); 
+      }else if(tmp != '*' && tmp != '#' && tmp != 'A' && tmp != 'B' && tmp != 'C' && tmp != 'D' && modo == 0){
+         senhaDigitada[passoSenha] = tmp;
+         passoSenha++;
+      }else if(tmp != '*' && tmp != '#' && tmp != 'A' && tmp != 'B' && tmp != 'C' && tmp != 'D' && modo == 1){
+         cadastro[passoCadastro] = tmp;
+         passoCadastro++;
+      }else if(tmp != '*' && tmp != '#' && tmp != 'A' && tmp != 'B' && tmp != 'C' && tmp != 'D' && modo == 2){
+         lt = tmp;
+          consultaM(cadastradoU(lt));
+      }else if(tmp != '*' && tmp != '#' && tmp != 'A' && tmp != 'B' && tmp != 'C' && tmp != 'D' && modo == 3){
+         lt = tmp;
+         consultaM(verificaC(lt));
+      }else if(tmp != '*' && tmp != '#' && tmp != 'A' && tmp != 'B' && tmp != 'C' && tmp != 'D' && modo == 4){
+         senhaDigitada[passo] = tmp;
+         passo++;
+         lcdMSG(14);
       }
-   }
-   if(msgTela[2] == 1){
-      
-   }else{
-      if(countSs>0){
-         msgTela[0] = 1;
-         mostraTela(1);
-         delay_ms(10);
-      }else{ 
-         mostraTela(2);
-      }
-   }   
-   
-   if(countSs == 4){
-      senhaAdm = liberaUser();
+      delay_ms(50);
    }
 
-   adm();
+   if(passoSenha == 4){
+      usuarioSenha = liberaUser();
+      clearD();
+      delay_ms(250);
+      if(modoAdm == 1 && usuarioSenha == '0'){
+         modoAdm = 2;
+         lcdMSG(4);         
+      }else{
+         lcdMSG(2);
+      } 
+   }else if(passoSenha>0 && modo == 0){
+      lcdMSG(1);
+   }else if(modoAdm == 42 && passoSenha<1){
+      lcdMSG(2);
+   }
+    if(passoCadastro == 6){
+      passoCadastro = 0;
+      lcdMSG(10);
+   }else if(passoCadastro > 0){
+      lcdMSG(9);
+   }
+   if(passo == 4){
+      consultaM(verificaS(senhaDigitada));
+   }
+
+
    output_low(PIN_B0);
    output_low(PIN_B1);
    output_low(PIN_B2);
@@ -141,37 +260,18 @@ void main()
    lcd_ini();
    delay_ms(50);
    init_m();
-
-     
-   //Carrega os arquivos da memoria interna para uma matriz
-//!   loadM();
-   //Salva a matriz na memoria interna
-//!   saveM();
-   //Limpa toda a memoria interna
+   
    zeraTudo(); //2D = '-'
    loadM();
+   
    //Cadastra novo usuário partir do seguinte vetor: Numero cadastro, Status, senha[4];
    unsigned char nova[] = {'0','1','8','9','8','9'};
    novoCM(nova);
    
-//!   
-//!   //Verifica se a senha esta no cadastro, retorna a linha da matriz em que ela se encontra ou o valor 42
-//!   unsigned char senha[] = {'8','9','8','9'};
-//! 
-   //
-//!   unsigned char user[] = {'5'};   
-//!   consultaM(cadastradoU(user));
-//!   
-
    output_low(PIN_B0);output_low(PIN_B1);output_low(PIN_B2);output_low(PIN_B3);
    set_tris_b(0xF0);
    port_B_pullups(true);
    
    enable_interrupts(GLOBAL);
    enable_interrupts(INT_RB);
-   
-  
-   while(true){
-
-   }
 }
