@@ -6,6 +6,7 @@
 unsigned char memoriaNull = 0xFF; //FF 
 int lin = 1;
 int col = 0;
+int contador = 6;
 
 unsigned char dados[LINHA][COLUNA]; //matriz que receber os dados da memoria
 
@@ -216,25 +217,29 @@ int status(unsigned char cadastro[4]) //verifica o status atual do cliente
 void resetaArray(){
    for (int i = 1; i < LINHA; i++){
        for (int j = 0; j < COLUNA; j++){
-         dados[lin][col++] = '\0';
+         dados[lin][col++] = memoriaNull;
       }
    }
 }
 
+
+void salvaMemoriaSerial(char ch) //salva todos os dados alterados na memoria
+{  
+      
+
+     write_ext_eeprom(contador++, (int)ch);
+}
+
+
 void recebeDados(char ch){//recebe os dados via serial e armazena na memoria
    if(ch == 'I'){
-      resetaArray();
-      lin = 1;
-      col = 0;
+      //resetaArray();
+     // lin = 1;
+     // col = 0;
+     contador = 6;
       return;
    }
-      if(col == 6){
-         col = 0;    
-         lin++;
-      }
-      dados[lin][col++] = ch;
-      salvaMemoria();
-   
+      salvaMemoriaSerial(ch);  
 }
 
 
