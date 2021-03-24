@@ -26,7 +26,7 @@
 #include "lib/kbd_ext_board2.c"
 #include "lib/funcMemoria.c"
 
-//#use rs232(baud=9600, xmit=PIN_C6, rcv=PIN_C7, Serial)
+#use rs232(baud=9600, xmit=PIN_C6, rcv=PIN_C7, ERRORS, STREAM=PORT1)
 
 unsigned char tmp;
 char lt = '-';
@@ -51,6 +51,7 @@ int liberaUser(){
         printf(lcd_escreve,"\f Ate breve!\n");
         mudarValorM(selecionado,1,'0');
       }
+      putc(valorM(selecionado,0));
       return valorM(selecionado,0);
    }else{
       printf(lcd_escreve," \f Desconhecido!\n");
@@ -64,7 +65,7 @@ void lcdMSG(int msg){
    switch (msg){
       case 1:
          printf(lcd_escreve," \f Digite a Senha:!\n");
-         printf(lcd_escreve," \r Senha: ");
+         printf(lcd_escreve," \r Senha:     ");
          printf(lcd_escreve,senhaDigitada);
          break;
       case 2:
@@ -127,13 +128,18 @@ void lcdMSG(int msg){
          break; 
       case 14:
          printf(lcd_escreve," \f Verifica Senha!\n");
-         printf(lcd_escreve," \r Senha: ");
+         printf(lcd_escreve," \r Senha:     ");
          printf(lcd_escreve,senhaDigitada);
          break;
       case 15:
          printf(lcd_escreve," \f A: Senha\n");
          printf(lcd_escreve," \r B: Codigo ");
          break; 
+      case 16:
+         printf(lcd_escreve," \f Esse codigo \n");
+         printf(lcd_escreve," \r ja esta em uso! ");
+         break;         
+         
       default:
       
          break; 
@@ -173,11 +179,19 @@ void RB_isr(void)
          lcdMSG(15);
          
       }else if(tmp == 'A' && modoAdm == 3){ //Opção do Menu A -> A
-         novoCM(cadastro);
+         if(verificaC(cadastro[0])==42){
+            novoCM(cadastro);
+         }else{
+            lcdMSG(16);
+            delay_ms(200);
+         }
          modoAdm = 2;
-         lcdMSG(4); 
+         lcdMSG(4);
+         for(int a = 0;a<6;a++){
+            cadastro[a] = '-';
+         }
       }else if(tmp == '#' && modoAdm == 3){ //Opção do Menu A -> #
-         for(int a = 0;a<5;a++){
+         for(int a = 0;a<6;a++){
             cadastro[a] = '-';
          }           
          modoAdm = 2;
@@ -187,7 +201,7 @@ void RB_isr(void)
          modoAdm = 2;
          lcdMSG(4); 
       }else if(tmp == '#' && modoAdm == 4){ //Opção do Menu B -> #
-         for(int a = 0;a<5;a++){
+         for(int a = 0;a<6;a++){
             cadastro[a] = '-';
          }
          modoAdm = 2;
@@ -200,20 +214,23 @@ void RB_isr(void)
          modo = 3;
       }else if(tmp == '#' && modoAdm == 5){ //Opção do Menu C -> Voltar
          modoAdm = 2;
+         senhaDigitada[0] = senhaDigitada[1] = senhaDigitada[2] = senhaDigitada[3] = '-';
+         modo = 0;
+         passo = 0;
          lcdMSG(4); 
-      }else if(tmp != '*' && tmp != '#' && tmp != 'A' && tmp != 'B' && tmp != 'C' && tmp != 'D' && modo == 0){
+      }else if(tmp != '*' && tmp != '#' && tmp != 'A' && tmp != 'B' && tmp != 'C' && tmp != 'D' && modo == 0){ //Modo normal espera senha
          senhaDigitada[passoSenha] = tmp;
          passoSenha++;
-      }else if(tmp != '*' && tmp != '#' && tmp != 'A' && tmp != 'B' && tmp != 'C' && tmp != 'D' && modo == 1){
+      }else if(tmp != '*' && tmp != '#' && tmp != 'A' && tmp != 'B' && tmp != 'C' && tmp != 'D' && modo == 1){ //Modo menu A, espera novo cadastro
          cadastro[passoCadastro] = tmp;
          passoCadastro++;
-      }else if(tmp != '*' && tmp != '#' && tmp != 'A' && tmp != 'B' && tmp != 'C' && tmp != 'D' && modo == 2){
+      }else if(tmp != '*' && tmp != '#' && tmp != 'A' && tmp != 'B' && tmp != 'C' && tmp != 'D' && modo == 2){ //Modo menu B, espera código
          lt = tmp;
-          consultaM(cadastradoU(lt));
-      }else if(tmp != '*' && tmp != '#' && tmp != 'A' && tmp != 'B' && tmp != 'C' && tmp != 'D' && modo == 3){
+         consultaM(cadastradoU(lt));
+      }else if(tmp != '*' && tmp != '#' && tmp != 'A' && tmp != 'B' && tmp != 'C' && tmp != 'D' && modo == 3){ //Modo menu C, espera código
          lt = tmp;
          consultaM(verificaC(lt));
-      }else if(tmp != '*' && tmp != '#' && tmp != 'A' && tmp != 'B' && tmp != 'C' && tmp != 'D' && modo == 4){
+      }else if(tmp != '*' && tmp != '#' && tmp != 'A' && tmp != 'B' && tmp != 'C' && tmp != 'D' && modo == 4){ //Modo menu C, espera senha
          senhaDigitada[passo] = tmp;
          passo++;
          lcdMSG(14);
@@ -244,6 +261,7 @@ void RB_isr(void)
    }
    if(passo == 4){
       consultaM(verificaS(senhaDigitada));
+      
    }
 
 
@@ -265,7 +283,7 @@ void main()
    loadM();
    
    //Cadastra novo usuário partir do seguinte vetor: Numero cadastro, Status, senha[4];
-   unsigned char nova[] = {'0','1','8','9','8','9'};
+   unsigned char nova[] = {'0','0','8','9','8','9'};
    novoCM(nova);
    
    output_low(PIN_B0);output_low(PIN_B1);output_low(PIN_B2);output_low(PIN_B3);
