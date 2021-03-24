@@ -240,7 +240,11 @@ void recebeDados(int ch){//recebe os dados via serial e armazena na memoria
         // col = 0;    
         // lin++;
      // }
-      write_ext_eeprom(cont++, ch);
+      if((cont % 6) == 0){
+         write_ext_eeprom(cont++, ((char)ch + '0'));
+      }else{
+         write_ext_eeprom(cont++, ch);
+      }   
       resetaArray();
       carregaMemoria();
       //dados[lin][col++] = ch;
