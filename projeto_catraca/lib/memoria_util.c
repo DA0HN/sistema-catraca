@@ -101,6 +101,7 @@ void enviaDados(){ //envia os dados da matriz via serial
       delay_ms(500);
     }
     fprintf(PORT1, "F\n\r"); 
+    fprintf(PORT1, "update\n\r"); 
     output_low(PIN_D1);
     output_low(PIN_D2);
 }
@@ -240,6 +241,8 @@ void recebeDados(int ch){//recebe os dados via serial e armazena na memoria
         // lin++;
      // }
       write_ext_eeprom(cont++, ch);
+      resetaArray();
+      carregaMemoria();
       //dados[lin][col++] = ch;
       //salvaMemoria();
    
