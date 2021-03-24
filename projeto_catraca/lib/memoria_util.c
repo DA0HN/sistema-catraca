@@ -129,7 +129,7 @@ void novoUsuario(unsigned char cadastro[4]) // cria um novo usuario e atualiza a
 { //cadastras um novo usuario na memoria
    int posicaoLinha = verificaPosicaoNula();
    dados[posicaoLinha][0] = recuperaId() + '0'; //id do usuario
-   dados[posicaoLinha][1] = '0';                //status
+   dados[posicaoLinha][1] = '1';                //status
 
    if (posicaoLinha == (-1))
    {
@@ -213,18 +213,28 @@ int status(unsigned char cadastro[4]) //verifica o status atual do cliente
 
 
 
+void resetaArray(){
+   for (int i = 1; i < LINHA; i++){
+       for (int j = 0; j < COLUNA; j++){
+         dados[lin][col++] = '\0';
+      }
+   }
+}
+
 void recebeDados(char ch){//recebe os dados via serial e armazena na memoria
    if(ch == 'I'){
+      resetaArray();
       lin = 1;
-      col = 0;      
-   }else{
+      col = 0;
+      return;
+   }
       if(col == 6){
          col = 0;    
          lin++;
       }
       dados[lin][col++] = ch;
       salvaMemoria();
-   } 
+   
 }
 
 
