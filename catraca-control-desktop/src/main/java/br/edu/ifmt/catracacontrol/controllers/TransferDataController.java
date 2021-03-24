@@ -60,7 +60,7 @@ public class TransferDataController implements Initializable {
         new ClientService()
       );
       this.serialCommunicationService.getConsole()
-        .println("Iniciando comunicação serial na porta " + porta + "\n");
+        .printWithTime("Iniciando comunicação serial na porta " + porta + "\n");
       this.serialCommunicationService.openCommunication();
     }
     catch(Exception e) {

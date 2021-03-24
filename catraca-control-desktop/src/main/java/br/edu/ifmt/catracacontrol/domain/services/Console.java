@@ -32,7 +32,7 @@ public class Console extends OutputStream {
     output.appendText(String.valueOf((char) i));
   }
 
-  public void println(String message) {
+  public void printWithTime(String message) {
     var formattedMessage = "[" + formatter.format(LocalDateTime.now()) + "] " + message;
     this.content.setValue(this.content.getValue() + formattedMessage);
   }

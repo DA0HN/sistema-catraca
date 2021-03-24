@@ -36,7 +36,7 @@ public class MessageListener implements SerialPortMessageListener {
   @Override
   public void serialEvent(SerialPortEvent event) {
     var message = event.getReceivedData();
-    this.service.getConsole().println(new String(message) + "\n");
+    this.service.getConsole().printWithTime(new String(message) + "\n");
     // FIXME: Atualizar String reativa para disparar análise
     this.service.getMessage().set(new String(message));
   }
