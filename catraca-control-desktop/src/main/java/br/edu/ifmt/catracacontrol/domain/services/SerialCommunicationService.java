@@ -58,28 +58,19 @@ public class SerialCommunicationService {
     var writer = this.serialPort.getOutputStream();
     try {
       writer.write('I');
-      writer.flush();
       clients.forEach(client -> {
         try {
-          var id = client.getId().byteValue() & 0xFF;
-          var status = (client.getStatus() == null ? client.getStatus().getCode() : 0) & 0xFF;
+          var id = client.getId().toString();
+          var status = client.getStatus() == null ? client.getStatus().getCode().toString() : 0;
           var password = client.getPassword();
-
-          writer.write(id);
-          writer.flush();
-          writer.write(status);
-          writer.flush();
-
-          StringBuilder msg = new StringBuilder(
-            String.format("%02X %02X ", id, status));
-
-          for(var ch : password.toCharArray()) {
-            msg.append(String.format("%02X ", (ch & 0xFF)));
-            writer.write(ch & 0xFF);
+          String data = id + "?" + status + password;
+//          String data = String.join("?", id, status.toString(), password);
+          this.console.println(data);
+          for(var ch : data.toCharArray()) {
+            writer.write(ch);
             TimeUnit.MILLISECONDS.sleep(550);
             writer.flush();
           }
-          this.console.println(msg.toString() + "\n");
         }
         catch(IOException | InterruptedException e) {
           e.printStackTrace();
