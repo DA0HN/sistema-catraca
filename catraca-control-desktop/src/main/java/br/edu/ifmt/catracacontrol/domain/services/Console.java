@@ -32,8 +32,12 @@ public class Console extends OutputStream {
     output.appendText(String.valueOf((char) i));
   }
 
-  public void appendMessage(String message) {
+  public void println(String message) {
     var formattedMessage = "[" + formatter.format(LocalDateTime.now()) + "] " + message;
-    this.content.setValue(this.content.getValue() + formattedMessage + '\n');
+    this.content.setValue(this.content.getValue() + formattedMessage);
+  }
+
+  public void print(String message) {
+    this.content.setValue(this.content.getValue() + message);
   }
 }

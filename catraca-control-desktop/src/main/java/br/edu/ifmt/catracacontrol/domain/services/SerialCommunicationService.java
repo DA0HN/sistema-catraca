@@ -89,12 +89,12 @@ public class SerialCommunicationService {
   public void processData(String[] data) {
     try {
       if(Arrays.stream(data).allMatch(s -> s.equals("-49"))) {
-        this.console.appendMessage("Linha em branco!");
+        this.console.println("Linha em branco!\n");
         return;
       }
 
       if(asList(data).contains("-")) {
-        this.console.appendMessage(Arrays.toString(data) + " mensagem estranha...");
+        this.console.println(Arrays.toString(data) + " mensagem estranha...\n");
         return;
       }
 
@@ -111,10 +111,10 @@ public class SerialCommunicationService {
       client.setPassword(password);
       client.setStatus(Status.fromCode(Integer.parseInt(status)));
       clientService.save(client);
-      this.console.appendMessage("O Cliente " + client.getPassword() + " foi armazenado.");
+      this.console.println("O Cliente " + client.getPassword() + " foi armazenado.\n");
     }
     catch(ServiceException e) {
-      this.console.appendMessage(e.getMessage());
+      this.console.println(e.getMessage() + "\n");
     }
   }
 }
