@@ -7,6 +7,14 @@ import com.fazecast.jSerialComm.SerialPortEvent;
 import com.fazecast.jSerialComm.SerialPortMessageListener;
 import lombok.Getter;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.joining;
+
 public class MessageListener implements SerialPortMessageListener {
 
   @Getter
@@ -35,9 +43,11 @@ public class MessageListener implements SerialPortMessageListener {
 
   @Override
   public void serialEvent(SerialPortEvent event) {
-    var message = event.getReceivedData();
-    this.service.getConsole().printWithTime(new String(message) + "\n");
-    // FIXME: Atualizar String reativa para disparar análise
-    this.service.getMessage().set(new String(message));
+    var message = new String(event.getReceivedData());
+
+    // Remove \n\r
+    var sanitizedMessage = message.substring(0, message.length()-2);
+
+    this.service.getMessage().set(sanitizedMessage);
   }
 }
