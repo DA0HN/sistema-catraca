@@ -41,12 +41,13 @@
 			this.btVoltar = new System.Windows.Forms.Button();
 			this.btSalvar = new System.Windows.Forms.Button();
 			this.label6 = new System.Windows.Forms.Label();
+			this.lbErro = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// label2
 			// 
 			this.label2.Font = new System.Drawing.Font("Times New Roman", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label2.Location = new System.Drawing.Point(125, 18);
+			this.label2.Location = new System.Drawing.Point(125, 9);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(417, 73);
 			this.label2.TabIndex = 5;
@@ -160,12 +161,22 @@
 			// label6
 			// 
 			this.label6.Font = new System.Drawing.Font("Times New Roman", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label6.Location = new System.Drawing.Point(140, 110);
+			this.label6.Location = new System.Drawing.Point(140, 126);
 			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(417, 73);
+			this.label6.Size = new System.Drawing.Size(417, 40);
 			this.label6.TabIndex = 28;
 			this.label6.Text = "Digite o Codigo do cliente";
 			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// lbErro
+			// 
+			this.lbErro.Font = new System.Drawing.Font("Times New Roman", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lbErro.ForeColor = System.Drawing.Color.Red;
+			this.lbErro.Location = new System.Drawing.Point(61, 67);
+			this.lbErro.Name = "lbErro";
+			this.lbErro.Size = new System.Drawing.Size(572, 76);
+			this.lbErro.TabIndex = 29;
+			this.lbErro.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// Verifica
 			// 
@@ -185,11 +196,13 @@
 			this.Controls.Add(this.txCodigo);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label6);
+			this.Controls.Add(this.lbErro);
 			this.Name = "Verifica";
 			this.Text = "Verifica";
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
+		private System.Windows.Forms.Label lbErro;
 		private System.Windows.Forms.Label label6;
 		private System.Windows.Forms.Button btSalvar;
 		private System.Windows.Forms.Button btVoltar;

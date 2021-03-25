@@ -60,6 +60,14 @@ namespace ProjetoSerial
 			}
 
 		}
+		public void sobrescreveArquivo(String[,] arquivo){
+			dados = arquivo;
+			salvaDados();
+		}
+		
+		public String[,] bancoCompleto(){
+			return dados;
+		}
 		
 		public String[] BuscaCod(String valor){
 			String[] temp = new string[3];
@@ -81,18 +89,24 @@ namespace ProjetoSerial
 				dados[encontrou,2] = temp[1];
 				dados[encontrou,3] = temp[2];
 				salvaDados();
+				CarregaArquivo();
 			}
+		}
+		
+		public bool temNaMemoria(String code){
+			for(int a = 0;a<16;a++){
+				if(dados[a,0]==code)
+					return false;
+			}
+			return true;
 		}
 		
 		public int adicionaDados(String[] temp){
 			Debug.WriteLine("Adicionando");
 			for(int a=0;a<16;a++){
-				Debug.WriteLine("Vetor: -"+dados[a,0]+"-");
 				if(dados[a,0]==""){
-					Debug.WriteLine("Na linha: "+a);
 					for(int b=0;b<4;b++){
 						dados[a,b]=temp[b];
-						
 					}
 					break;
 				}
@@ -101,6 +115,7 @@ namespace ProjetoSerial
 			}
 			
 			salvaDados();
+			CarregaArquivo();
 			return 0;
 		}
 		

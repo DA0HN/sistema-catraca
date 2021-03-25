@@ -30,11 +30,12 @@
 
 unsigned char tmp;
 char lt = '-';
-int passoSenha = 0, passoCadastro = 0, passo = 0;
+int passoSenha = 0, passoCadastro = 0, passo = 0, passoSerial = 0;
 unsigned char senhaDigitada[] = {'-','-','-','-'};
 unsigned char cadastro[] = {'-','-','-','-','-','-'};
-int modoAdm = 42, usuarioSenha = 43, menuAdm = 5, modo = 0;
-
+int modoAdm = 42, usuarioSenha = 43, menuAdm = 5, modo = 0, i =0, f = 0;
+char serialDados[10];
+char seralCompare[] = {'b','a','n','c','o'};
 void clearD(){
    passoSenha = 0;
    senhaDigitada[0] = senhaDigitada[1] = senhaDigitada[2] = senhaDigitada[3] = '-';
@@ -43,19 +44,25 @@ void clearD(){
 int liberaUser(){
    delay_ms(100);
    int selecionado = verificaS(senhaDigitada);
+   
    if(selecionado!=42){
+      putc(valorM(selecionado,0));
+      putc('*');
       if(valorM(selecionado,1) == '0'){
         printf(lcd_escreve,"\f Bem Vindo!\n");
         mudarValorM(selecionado,1,'1');
+        putc('1');
       }else{
         printf(lcd_escreve,"\f Ate breve!\n");
         mudarValorM(selecionado,1,'0');
+        putc('0');
       }
-      putc(valorM(selecionado,0));
       return valorM(selecionado,0);
    }else{
       printf(lcd_escreve," \f Desconhecido!\n");
       printf(lcd_escreve," \r Bloqueado!\n");
+      modoAdm = 42;
+      modo = 0;
       return 42;
    }   
    clearD();
@@ -145,7 +152,74 @@ void lcdMSG(int msg){
          break; 
    }
 }
+void enviaBanco(){
+   disable_interrupts(INT_RTCC);
+   clear_interrupt(INT_RTCC);
+   disable_interrupts(INT_RB);
+   clear_interrupt(INT_RB);
+   putc('B');
+   printf(lcd_escreve," \f Enviando \n");
+   printf(lcd_escreve," \r Banco ");
+   for(int i = 0;i<16;i++){
+      for(int f = 0;f<6;f++){
+         char enviando = valorM(i,f);
+         if(enviando !='-'){
+            putc(enviando);
+         }
+         putc('*');
+      }
+   }
+   putc('T');
+   printf(lcd_escreve," \f Envio \n");
+   printf(lcd_escreve," \r Concluido ");
+   lcdMSG(2);
+   clear_interrupt(INT_RTCC);
+   enable_interrupts(INT_RTCC);
+   clear_interrupt(INT_RB);
+   enable_interrupts(INT_RB);
+}
+#INT_RTCC
+void  RTCC_isr(void) 
+{     
+   disable_interrupts(INT_RTCC);
+   clear_interrupt(INT_RTCC);
+  
+   
+      while(kbhit()){                              
+         lt = getc();                                                           
+         if(lt == 'B'){
+            enviaBanco();
+            lt = ' ';
+         }else if(lt == 'R'){
+            printf(lcd_escreve," \f Recebendo \n");
+            disable_interrupts(INT_RB);
+            clear_interrupt(INT_RB);
+            passo = 0;
+         }else if(lt == 'T'){
+            printf(lcd_escreve," \f Memoria \n");
+            printf(lcd_escreve," \r Atualizada \n");
+            saveM();
+            loadM();
+            passo = 1;
+            
+            delay_ms(200);
+            clear_interrupt(INT_RB);
+            enable_interrupts(INT_RB); 
+         }
+         if(passo == 0){
+            mudarValorM(i,f,lt);
+            f++;
+            if(f == 6){
+               i++;
+               f = 0;
+            }
+         }
+   }
 
+  
+  clear_interrupt(INT_RTCC);
+  enable_interrupts(INT_RTCC);
+}
 
 #INT_RB
 void RB_isr(void) 
@@ -153,7 +227,7 @@ void RB_isr(void)
    disable_interrupts(INT_RB);
    clear_interrupt(INT_RB);
    
-    tmp = tc_tecla();
+   tmp = tc_tecla();
  
    if(tmp!= 255){   
       if(tmp == '*' && modoAdm == 42){
@@ -177,6 +251,9 @@ void RB_isr(void)
       }else if(tmp == 'C' && modoAdm == 2){ //Menu C
          modoAdm = 5;
          lcdMSG(15);
+         
+      }else if(tmp == 'D' && modoAdm == 2){ //Menu D
+         enviaBanco();
          
       }else if(tmp == 'A' && modoAdm == 3){ //Opção do Menu A -> A
          if(verificaC(cadastro[0])==42){
@@ -264,7 +341,6 @@ void RB_isr(void)
       
    }
 
-
    output_low(PIN_B0);
    output_low(PIN_B1);
    output_low(PIN_B2);
@@ -290,6 +366,8 @@ void main()
    set_tris_b(0xF0);
    port_B_pullups(true);
    
+   enable_interrupts(INT_RTCC);
    enable_interrupts(GLOBAL);
    enable_interrupts(INT_RB);
+   
 }

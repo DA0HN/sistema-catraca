@@ -43,6 +43,7 @@ namespace ProjetoSerial
 			this.btVerifica = new System.Windows.Forms.Button();
 			this.btAtualiza = new System.Windows.Forms.Button();
 			this.btMonitora = new System.Windows.Forms.Button();
+			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -136,6 +137,7 @@ namespace ProjetoSerial
 			this.Text = "ProjetoSerial";
 			this.ResumeLayout(false);
 		}
+		private System.ComponentModel.BackgroundWorker backgroundWorker1;
 		private System.Windows.Forms.Button btMonitora;
 		private System.Windows.Forms.Button btAtualiza;
 		private System.Windows.Forms.Button btVerifica;
@@ -148,6 +150,11 @@ namespace ProjetoSerial
 		{
 			Monitora monitora = new Monitora();
 			monitora.Show();
+		}
+		
+		void SegundoPlanoRunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+		{
+			
 		}
 	}
 }

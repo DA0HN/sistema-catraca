@@ -25,9 +25,12 @@ namespace ProjetoSerial
 				if(funcoes.adicionaDados(temp)==1){
 					lbErro.Text = "Sem espaço na memoria!";
 				}else{
-					lbErro.Text = "Cadastrado com Sucesso";
-					clearCampos();
-				}
+					while(funcoes.temNaMemoria(txCodigo.Text)){
+					      	funcoes.adicionaDados(temp);
+					      }
+					      lbErro.Text = "Cadastrado com Sucesso";
+					      clearCampos();
+					}
 			}
 		}
 		

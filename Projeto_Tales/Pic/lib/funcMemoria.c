@@ -75,7 +75,7 @@ void novoCM(unsigned char nova[6]){ //ok // pos é o referencial do usuário e nov
    }
 }
 
-int verificaS(unsigned char senha[4]){ //ok
+int verificaS(unsigned char senha[4]){ //Roda a matriz, checando apenas os ultimas 4 colunas
    int encontrou = 0;
    for(int i = 0;i<16;i++){
       encontrou = 0;
@@ -123,5 +123,6 @@ unsigned char valorM(int x,int y){
 
 void mudarValorM(int x, int y, char valor){
    dados[x][y] = valor;
-   saveM();
 }
+
+

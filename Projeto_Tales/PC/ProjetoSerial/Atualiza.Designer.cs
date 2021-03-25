@@ -43,6 +43,7 @@ namespace ProjetoSerial
 			this.btEnvia = new System.Windows.Forms.Button();
 			this.btVoltar = new System.Windows.Forms.Button();
 			this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
+			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
 			this.SuspendLayout();
 			// 
 			// label2
@@ -69,11 +70,11 @@ namespace ProjetoSerial
 			// txSaida
 			// 
 			this.txSaida.Enabled = false;
-			this.txSaida.Font = new System.Drawing.Font("Times New Roman", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.txSaida.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.txSaida.Location = new System.Drawing.Point(49, 102);
 			this.txSaida.Multiline = true;
 			this.txSaida.Name = "txSaida";
-			this.txSaida.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
+			this.txSaida.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.txSaida.Size = new System.Drawing.Size(565, 297);
 			this.txSaida.TabIndex = 30;
 			// 
@@ -86,6 +87,7 @@ namespace ProjetoSerial
 			this.btEnvia.TabIndex = 31;
 			this.btEnvia.Text = "Envia Banco";
 			this.btEnvia.UseVisualStyleBackColor = true;
+			this.btEnvia.Click += new System.EventHandler(this.BtEnviaClick);
 			// 
 			// btVoltar
 			// 
@@ -96,6 +98,16 @@ namespace ProjetoSerial
 			this.btVoltar.TabIndex = 32;
 			this.btVoltar.Text = "Voltar";
 			this.btVoltar.UseVisualStyleBackColor = true;
+			this.btVoltar.Click += new System.EventHandler(this.BtVoltarClick);
+			// 
+			// serialPort1
+			// 
+			this.serialPort1.PortName = "COM3";
+			// 
+			// backgroundWorker1
+			// 
+			this.backgroundWorker1.WorkerSupportsCancellation = true;
+			this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.BackgroundWorker1DoWork);
 			// 
 			// Atualiza
 			// 
@@ -112,6 +124,7 @@ namespace ProjetoSerial
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
+		private System.ComponentModel.BackgroundWorker backgroundWorker1;
 		private System.IO.Ports.SerialPort serialPort1;
 		private System.Windows.Forms.Button btVoltar;
 		private System.Windows.Forms.Button btEnvia;

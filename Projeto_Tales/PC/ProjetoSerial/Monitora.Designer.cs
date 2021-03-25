@@ -42,6 +42,8 @@ namespace ProjetoSerial
 			this.btVoltar = new System.Windows.Forms.Button();
 			this.btCarregar = new System.Windows.Forms.Button();
 			this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
+			this.timer1 = new System.Windows.Forms.Timer(this.components);
+			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
 			this.SuspendLayout();
 			// 
 			// label2
@@ -61,7 +63,7 @@ namespace ProjetoSerial
 			this.txSaida.Location = new System.Drawing.Point(58, 94);
 			this.txSaida.Multiline = true;
 			this.txSaida.Name = "txSaida";
-			this.txSaida.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
+			this.txSaida.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.txSaida.Size = new System.Drawing.Size(565, 350);
 			this.txSaida.TabIndex = 7;
 			// 
@@ -87,6 +89,15 @@ namespace ProjetoSerial
 			this.btCarregar.UseVisualStyleBackColor = true;
 			this.btCarregar.Click += new System.EventHandler(this.BtCarregarClick);
 			// 
+			// serialPort1
+			// 
+			this.serialPort1.PortName = "COM3";
+			// 
+			// backgroundWorker1
+			// 
+			this.backgroundWorker1.WorkerSupportsCancellation = true;
+			this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.BackgroundWorker1DoWork);
+			// 
 			// Monitora
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -101,6 +112,8 @@ namespace ProjetoSerial
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
+		private System.ComponentModel.BackgroundWorker backgroundWorker1;
+		private System.Windows.Forms.Timer timer1;
 		private System.IO.Ports.SerialPort serialPort1;
 		private System.Windows.Forms.Button btCarregar;
 		private System.Windows.Forms.Button btVoltar;

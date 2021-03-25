@@ -34,6 +34,11 @@ namespace ProjetoSerial
 			if(txSenha.Text !=""){
 				temp = new string[]{txStatus.Text, txNome.Text, txSenha.Text};
 				funcoes.atualizaDados(temp);
+				while(funcoes.temNaMemoria(txCodigo.Text)){
+					funcoes.adicionaDados(temp);
+				}
+				lbErro.Text = "Atualizado com Sucesso";
+				clearCampos();
 			}else{
 				txNome.Text = "Pesquise Primeiro";
 			}
