@@ -1,7 +1,7 @@
 [PROJECT]
 Target=sistema_catraca.hex
 Processor_Text=PIC16F877A
-CCSVersion=5.025
+CCSVersion=5.015
 Compiler=PCM
 [Target Data]
 FileList=sistema_catraca.c
@@ -35,8 +35,8 @@ D3_L6=[73176]Stopped Editing.
 
 [Opened Files]
 1=sistema_catraca.c
-2=lib\memoria_util.c
-3=lib\tela_util.c
+2=lib\tela_util.c
+3=lib\memoria_util.c
 4=
 5=
 6=
