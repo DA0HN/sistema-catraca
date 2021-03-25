@@ -81,7 +81,7 @@ public class CreateController implements Initializable {
     var client = new Client();
     client.setName(name);
     client.setPassword(password);
-    client.setStatus(Status.FORA);
+    client.setStatus(Status.PAGO);
 
     try {
       service.save(client);
