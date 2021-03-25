@@ -1,4 +1,4 @@
-#include <main.h>
+#include <sistema_catraca.h>
 #include <2404.c>
 #include "lib/lcd_util.c"
 #include "lib/teclado_util.c"
