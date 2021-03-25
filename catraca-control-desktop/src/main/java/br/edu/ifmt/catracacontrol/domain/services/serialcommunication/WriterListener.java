@@ -18,6 +18,7 @@ public class WriterListener implements SerialPortDataListener {
 
   @Override
   public void serialEvent(SerialPortEvent event) {
+    // FIXME: FAZER ESTE CARA FUNCIONAR!!!!!!!
     if(event.getEventType() == SerialPort.LISTENING_EVENT_DATA_WRITTEN) {
       console.printWithTime("Todos os Bytes foram enviados!\n");
     }

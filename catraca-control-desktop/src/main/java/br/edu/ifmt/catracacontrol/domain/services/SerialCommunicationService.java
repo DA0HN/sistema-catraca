@@ -71,7 +71,6 @@ public class SerialCommunicationService {
           writer.write(id);
           TimeUnit.MILLISECONDS.sleep(550);
           writer.flush();
-          // TODO: Adicionar espaço e retirar do print do console
           String data = status + " " + password;
 
           this.console.printWithTime("Enviando: " + String.format("%03d", id) + " " + data + " [");
@@ -156,7 +155,6 @@ public class SerialCommunicationService {
     var dataHex = new StringJoiner(" ");
 
     for(char d : printableData.toCharArray()) {
-      // TODO: tirar virgula
       if(d != ',' && !Character.isWhitespace(d)) {
         dataHex.add(format("0x%02x", (d & 0xff)));
       }

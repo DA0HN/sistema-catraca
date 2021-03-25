@@ -35,6 +35,7 @@ public class TransferDataController implements Initializable {
   @FXML
   private Button backButton;
 
+
   @FXML
   void backButtonOnClicked(MouseEvent event) throws Exception {
     this.serialCommunicationService.closeCommunication();
@@ -47,7 +48,9 @@ public class TransferDataController implements Initializable {
     this.serialCommunicationService.updatePIC();
   }
 
-
+  // TODO: implementar botão para limpar tela
+  // TODO: implementar botão para gerar hexadecimal do banco
+  // TODO: implementar botão para desligar serial
   @Override public void initialize(URL location, ResourceBundle resources) {
     try {
       var porta = "COM2";
