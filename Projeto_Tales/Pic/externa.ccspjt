@@ -157,18 +157,20 @@ D5_L45=[85376]Stopped Editing.
 D5_L46=[85467]Started Editing.
 D5_L47=[85839]Stopped Editing.
 D6=25-03-2021
-D6_L=3
+D6_L=5
 D6_L1=[1145]Started Editing.
 D6_L2=[1738]Stopped Editing.
 D6_E=19
 D6_D=0
 D6_L3=[2646]Project Closed.
+D6_L4=[33639]Project Opened.
+D6_L5=[34664]Started Editing.
 
 [Opened Files]
 1=externa.c
 2=lib\funcMemoria.c
-3=
-4=..\..\projeto_catraca\sistema_catraca.c
+3=externa.h
+4=
 5=
 [externa.c]
 Type=4

@@ -94,7 +94,7 @@ namespace ProjetoSerial
 		}
 		
 		public bool temNaMemoria(String code){
-			for(int a = 0;a<16;a++){
+			for(int a = 0;a<10;a++){
 				if(dados[a,0]==code)
 					return false;
 			}

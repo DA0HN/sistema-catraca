@@ -184,7 +184,6 @@ void  RTCC_isr(void)
    disable_interrupts(INT_RTCC);
    clear_interrupt(INT_RTCC);
   
-   
       while(kbhit()){                              
          lt = getc();                                                           
          if(lt == 'B'){
