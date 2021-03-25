@@ -6,6 +6,8 @@ import br.edu.ifmt.catracacontrol.domain.services.SerialCommunicationService;
 import br.edu.ifmt.catracacontrol.views.HomeView;
 import com.fazecast.jSerialComm.SerialPort;
 import com.jfoenix.controls.JFXTextArea;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -35,6 +37,8 @@ public class TransferDataController implements Initializable {
   @FXML
   private Button backButton;
 
+  @FXML
+  private Button clearScreenButton;
 
   @FXML
   void backButtonOnClicked(MouseEvent event) throws Exception {
@@ -52,6 +56,11 @@ public class TransferDataController implements Initializable {
       this.serialCommunicationService.getConsole()
         .printWithTime("Erro: " + e.getMessage());
     }
+  }
+
+  @FXML
+  void clearScreenButtonOnClicked(MouseEvent event) {
+    this.serialCommunicationService.getConsole().getContent().set("");
   }
 
   // TODO: implementar botão para limpar tela

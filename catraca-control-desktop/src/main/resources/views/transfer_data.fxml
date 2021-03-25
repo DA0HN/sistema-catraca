@@ -9,5 +9,6 @@
       <JFXTextArea fx:id="outputTextArea" focusColor="#02ff35" layoutX="12.0" layoutY="14.0" prefHeight="319.0" prefWidth="577.0" styleClass="text-area" />
       <Button fx:id="updatePicButton" layoutX="486.0" layoutY="350.0" mnemonicParsing="false" onMouseClicked="#updatePicButtonOnClicked" prefHeight="30.0" prefWidth="100.0" text="Atualizar PIC" />
       <Button fx:id="backButton" layoutX="12.0" layoutY="350.0" mnemonicParsing="false" onMouseClicked="#backButtonOnClicked" prefHeight="30.0" prefWidth="100.0" text="Voltar" />
+      <Button fx:id="clearScreenButton" layoutX="362.0" layoutY="350.0" mnemonicParsing="false" onMouseClicked="#clearScreenButtonOnClicked" prefHeight="30.0" prefWidth="100.0" text="Limpar Tela" />
    </children>
 </AnchorPane>
