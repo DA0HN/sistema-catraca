@@ -85,7 +85,6 @@ void apagaMemoria() //apaga todos os dados da memoria
 }
 
 void enviaDados(){ //envia os dados da matriz via serial
-   fprintf(PORT1, "I\n\r");
    for(int i = 0; i < LINHA; i++){
       output_toggle(PIN_D1);
       for(int j = 0; j < COLUNA; j++){
@@ -99,10 +98,8 @@ void enviaDados(){ //envia os dados da matriz via serial
          }
          delay_ms(500);
       }
-    //fprintf(PORT1, "\n\r"); 
       delay_ms(500);
     }
-    fprintf(PORT1, "F\n\r"); 
     fprintf(PORT1, "update\n\r"); 
     output_low(PIN_D1);
     output_low(PIN_D2);
