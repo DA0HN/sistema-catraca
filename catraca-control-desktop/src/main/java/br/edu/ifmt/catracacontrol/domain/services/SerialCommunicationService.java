@@ -65,14 +65,14 @@ public class SerialCommunicationService {
       clients.forEach(client -> {
         try {
           var id = client.getId().intValue();
-          var status = client.getStatus() == null ? client.getStatus().getCode().toString() : 0;
+          var status = client.getStatus() != null ? client.getStatus().getCode().toString() : 0;
           var password = client.getPassword();
 
           writer.write(id);
           TimeUnit.MILLISECONDS.sleep(550);
           writer.flush();
           // TODO: Adicionar espaço e retirar do print do console
-          String data = status + password;
+          String data = status + " " + password;
 
           this.console.printWithTime("Enviando: " + String.format("%03d", id) + " " + data + " [");
           this.console.print(
