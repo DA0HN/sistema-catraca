@@ -3,8 +3,8 @@ package br.edu.ifmt.catracacontrol.domain.models;
 import lombok.Getter;
 
 public enum Status {
-  DENTRO(1, "Dentro"),
-  FORA(0, "Fora");
+  PAGO(1, "Pagamento realizado"),
+  NAO_PAGO(0, "Pagamento pendente");
 
   @Getter
   private final Integer code;
@@ -23,6 +23,24 @@ public enum Status {
       }
     }
     throw new IllegalStateException("Não foi possível identificar o código " + code);
+  }
+
+  public static Status fromString(String string) {
+    for(Status status : Status.values()) {
+      if(status.getStatus().equals(string)) {
+        return status;
+      }
+    }
+    throw new IllegalStateException("Não foi possível identificar a string " + string);
+  }
+
+  public static Status invert(Status status) {
+    if(status.getCode() == 1) {
+      return Status.NAO_PAGO;
+    }
+    else {
+      return Status.PAGO;
+    }
   }
 
 }
