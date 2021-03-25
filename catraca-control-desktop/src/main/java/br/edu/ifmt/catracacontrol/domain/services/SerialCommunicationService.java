@@ -61,6 +61,7 @@ public class SerialCommunicationService {
     var clients = this.clientService.findAll();
     var writer = this.serialPort.getOutputStream();
     try {
+      TimeUnit.MILLISECONDS.sleep(3000);
       writer.write('I');
       TimeUnit.MILLISECONDS.sleep(400);
       writer.flush();
