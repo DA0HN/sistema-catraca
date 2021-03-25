@@ -49,4 +49,8 @@ public class ClientService implements IClientService {
   @Override public Boolean isClientRegistered(String password) {
     return repository.isClientRegistered(password);
   }
+
+  @Override public void update(Client client) {
+    repository.begin().update(client).commit();
+  }
 }

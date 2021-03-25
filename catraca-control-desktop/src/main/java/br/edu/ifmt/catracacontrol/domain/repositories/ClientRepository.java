@@ -78,4 +78,9 @@ public class ClientRepository implements IClientRepository {
     );
     return query.getResultList();
   }
+
+  @Override public IClientRepository update(Client client) {
+    manager.merge(client);
+    return this;
+  }
 }

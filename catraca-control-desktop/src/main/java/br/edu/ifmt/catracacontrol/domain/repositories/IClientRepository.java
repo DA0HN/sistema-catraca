@@ -9,6 +9,7 @@ public interface IClientRepository {
   IClientRepository save(Client client);
   IClientRepository save(List<Client> clients);
   IClientRepository deleteById(Long id);
+  IClientRepository update(Client client);
   void commit();
   void undo();
 

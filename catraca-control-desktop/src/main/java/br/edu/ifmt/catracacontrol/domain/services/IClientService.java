@@ -8,6 +8,8 @@ public interface IClientService {
   void save(Client client) throws ServiceException;
   void save(List<Client> clients) throws ServiceException;
   void deleteById(Long id);
+  void update(Client client);
+
 
   List<Client> findAll();
   Client findById(Long id);
