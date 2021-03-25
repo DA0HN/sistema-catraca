@@ -10,8 +10,10 @@ import lombok.Getter;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.StringJoiner;
 import java.util.concurrent.TimeUnit;
 
+import static java.lang.String.format;
 import static java.util.Arrays.asList;
 
 public class SerialCommunicationService {
@@ -38,7 +40,7 @@ public class SerialCommunicationService {
     serialPort.addDataListener(new WriterListener(console));
 
     message.addListener((observable, oldValue, newValue) -> {
-      processData(newValue.split(","));
+      processData(newValue.split(","), newValue);
     });
 
   }
@@ -69,10 +71,12 @@ public class SerialCommunicationService {
           writer.write(id);
           TimeUnit.MILLISECONDS.sleep(550);
           writer.flush();
-
+          // TODO: Adicionar espaço e retirar do print do console
           String data = status + password;
 
-          this.console.printWithTime("Enviando: " + id + data + "\n");
+          this.console.printWithTime("Enviando: " + String.format("%03d", id) + " " + data + " [");
+          this.console.print(
+            format("0x%02x", (id & 0xFF) + 48) + " " + toHex(data) + "]\n");
 
           for(var ch : data.toCharArray()) {
             writer.write(ch);
@@ -81,55 +85,82 @@ public class SerialCommunicationService {
           }
         }
         catch(IOException | InterruptedException e) {
-          e.printStackTrace();
+          this.console.printWithTime("Ocorreu um erro durante o envio de mensagem\n" +
+                                       "Erro: " + e.getMessage() + "\n");
         }
       });
       writer.write(0x00);
+      this.console.printWithTime("Atualização concluída!\n");
     }
     catch(IOException e) {
       e.printStackTrace();
+      this.console.printWithTime("Ocorreu um erro durante a atualização do PIC\n" +
+                                   "Erro: " + e.getMessage() + "\n");
     }
   }
 
-  public void processData(String[] data) {
+  public void processData(String[] data, String printableData) {
     try {
-      if(Arrays.stream(data).allMatch(s -> s.equals("-49"))) {
-        this.console.printWithTime("Linha em branco!\n");
-        return;
-      }
+      if(validateData(data)) return;
 
-      if(asList(data).contains("-")) {
-        this.console.printWithTime(Arrays.toString(data) + " mensagem estranha...\n");
-        return;
-      }
-
-      if(String.join("", data).equals("update")) {
-        this.console.printWithTime("Pedido de sincronização!\n");
-        this.updatePIC();
-        return;
-      }
-
-      var id = data[0];
+      var id = Integer.parseInt(data[0]);
       var status = data[1] == null ? "0" : data[1];
       var password = String.join("",
                                  asList(data).subList(this.passwordBegin, this.passwordEnd)
       );
-      StringBuilder temp = new StringBuilder();
-      for(char p : password.toCharArray()) {
-        temp.append((int) p);
-      }
-      this.console.printWithTime("Recebido: " + temp.toString() + "\n");
+
+      var dataHex = format("0x%02x ", ((id & 0xff) + 48)) +
+                      toHex(status) +
+                      " " + toHex(password);
+
+      this.console.printWithTime("Recebido: " + printableData + " [");
+      this.console.print(dataHex + "] \n");
 
       var client = new Client();
       client.setPassword(password);
       client.setStatus(Status.fromCode(Integer.parseInt(status)));
 
-      this.console.printWithTime("O Cliente " + client.getPassword() + " será armazenado.\n");
-
       clientService.save(client);
+
+      this.console.printWithTime("O Cliente " + client.getPassword() + " será armazenado.\n");
     }
-    catch(ServiceException e) {
-      this.console.printWithTime(e.getMessage() + "\n");
+    catch(Exception e) {
+      this.console.printWithTime("Erro: " + e.getMessage() + "\n");
     }
+  }
+
+  private boolean validateData(String[] data) {
+    if(Arrays.stream(data).allMatch(s -> asList("-48", "-49").contains(s))) {
+      this.console.printWithTime("Linha em branco!\n");
+      return true;
+    }
+
+    if(data.length < 5) {
+      this.console.printWithTime("Mensagem corrompida :(\n");
+    }
+
+    if(asList(data).contains("-")) {
+      this.console.printWithTime(Arrays.toString(data) + " mensagem estranha...\n");
+      return true;
+    }
+
+    if(String.join("", data).equals("update")) {
+      this.console.printWithTime("Pedido de sincronização!\n");
+      this.updatePIC();
+      return true;
+    }
+    return false;
+  }
+
+  private String toHex(String printableData) {
+    var dataHex = new StringJoiner(" ");
+
+    for(char d : printableData.toCharArray()) {
+      // TODO: tirar virgula
+      if(d != ',') {
+        dataHex.add(format("0x%02x", (d & 0xff)));
+      }
+    }
+    return dataHex.toString();
   }
 }
