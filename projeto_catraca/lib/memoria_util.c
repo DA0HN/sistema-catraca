@@ -96,7 +96,7 @@ void enviaDados(){ //envia os dados da matriz via serial
                fprintf(PORT1, "%d,", dados[i][j] - '0');             
             }
          }
-         delay_ms(500);
+         delay_ms(200);
       }
       delay_ms(500);
     }
