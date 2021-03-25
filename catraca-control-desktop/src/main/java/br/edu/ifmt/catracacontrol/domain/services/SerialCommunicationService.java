@@ -122,7 +122,7 @@ public class SerialCommunicationService {
 
       clientService.save(client);
 
-      this.console.printWithTime("O Cliente " + client.getPassword() + " será armazenado.\n");
+      this.console.printWithTime("O Cliente " + client.getPassword() + " foi armazenado.\n");
     }
     catch(Exception e) {
       this.console.printWithTime("Erro: " + e.getMessage() + "\n");
@@ -157,7 +157,7 @@ public class SerialCommunicationService {
 
     for(char d : printableData.toCharArray()) {
       // TODO: tirar virgula
-      if(d != ',') {
+      if(d != ',' && !Character.isWhitespace(d)) {
         dataHex.add(format("0x%02x", (d & 0xff)));
       }
     }
