@@ -56,7 +56,7 @@ void RB_isr(void)
 void main()
 { 
    init_ext_eeprom();
-   apagaMemoria();
+   //apagaMemoria();
    output_low(PIN_D0);
    lcd_ini();
    delay_ms(10);

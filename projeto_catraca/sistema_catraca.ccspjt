@@ -1,7 +1,7 @@
 [PROJECT]
 Target=sistema_catraca.hex
 Processor_Text=PIC16F877A
-CCSVersion=5.015
+CCSVersion=5.025
 Compiler=PCM
 [Target Data]
 FileList=sistema_catraca.c
@@ -11,7 +11,7 @@ Type=4
 1=sistema_catraca.c
 
 [ProjectLog]
-Days=2
+Days=3
 D1=19-03-2021
 D1_L=3
 D1_L1=[78711]Project Opened.
@@ -20,6 +20,18 @@ D1_L3=[78796]Project Opened.
 D2=23-03-2021
 D2_L=1
 D2_L1=[44306]Project Opened.
+TotalEdit=14
+TotalDebug=0
+D3=24-03-2021
+D3_E=14
+D3_D=0
+D3_L=6
+D3_L1=[67953]Project Closed.
+D3_L2=[72183]Project Opened.
+D3_L3=[72235]Started Editing.
+D3_L4=[72793]Stopped Editing.
+D3_L5=[72872]Started Editing.
+D3_L6=[73176]Stopped Editing.
 
 [Opened Files]
 1=sistema_catraca.c

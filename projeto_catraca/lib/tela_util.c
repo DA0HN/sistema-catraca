@@ -105,6 +105,10 @@ void telaCrudAdmin()
       printf(lcd_escreve, "\fEnvia Dados \n\rp/ Computador");
       tipoTela = 5;
    }
+   else if (comandoAdmin == 9) {
+      printf(lcd_escreve, "\fLimpando memoria!\n");
+      apagaMemoria();
+   }
    limpaSenha();
    delay_ms(2000);
    comandoAdmin = 0;
