@@ -69,17 +69,18 @@ public class SerialCommunicationService {
           var password = client.getPassword();
 
           writer.write(id);
-          TimeUnit.MILLISECONDS.sleep(550);
+          TimeUnit.MILLISECONDS.sleep(400);
           writer.flush();
-          String data = status + " " + password;
-
-          this.console.printWithTime("Enviando: " + String.format("%03d", id) + " " + data + " [");
+          var printableData = status + " " + password;
+          var data = status + password;
+          this.console.printWithTime(
+            "Enviando: " + String.format("%03d", id) + " " + printableData + " [");
           this.console.print(
-            format("0x%02x", (id & 0xFF) + 48) + " " + toHex(data) + "]\n");
+            format("0x%02x", (id & 0xFF) + 48) + " " + toHex(printableData) + "]\n");
 
           for(var ch : data.toCharArray()) {
             writer.write(ch);
-            TimeUnit.MILLISECONDS.sleep(550);
+            TimeUnit.MILLISECONDS.sleep(400);
             writer.flush();
           }
         }
@@ -89,6 +90,7 @@ public class SerialCommunicationService {
         }
       });
       writer.write(0x00);
+      writer.flush();
       this.console.printWithTime("Atualização concluída!\n");
     }
     catch(IOException e) {
@@ -134,8 +136,8 @@ public class SerialCommunicationService {
       return true;
     }
 
-    if(data.length < 5) {
-      this.console.printWithTime("Mensagem corrompida :(\n");
+    if(data.length < 4) {
+      this.console.printWithTime("Mensagem corrompida "+ Arrays.toString(data) +" :(\n");
     }
 
     if(asList(data).contains("-")) {
