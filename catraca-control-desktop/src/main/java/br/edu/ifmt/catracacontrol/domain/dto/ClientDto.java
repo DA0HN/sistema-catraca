@@ -8,6 +8,10 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import lombok.Getter;
 
+import static br.edu.ifmt.catracacontrol.domain.models.Status.fromString;
+import static br.edu.ifmt.catracacontrol.domain.models.Status.invert;
+import static br.edu.ifmt.catracacontrol.domain.models.Status.valueOf;
+
 public class ClientDto {
   private LongProperty id;
   private StringProperty name;
@@ -35,7 +39,7 @@ public class ClientDto {
     client.setId(this.id.get());
     client.setName(this.name.get());
     client.setPassword(this.password.get());
-    client.setStatus(Status.valueOf(this.getStatus()));
+    client.setStatus(fromString(this.getStatus()));
     return client;
   }
 
@@ -85,5 +89,11 @@ public class ClientDto {
 
   public void setStatus(String status) {
     this.status.set(status);
+  }
+
+  public void updateStatus() {
+    var status = fromString(this.status.get());
+    this.status.set(invert(status).getStatus());
+    System.out.println(this.status.get());
   }
 }
