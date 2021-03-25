@@ -45,7 +45,13 @@ public class TransferDataController implements Initializable {
 
   @FXML
   void updatePicButtonOnClicked(MouseEvent event) {
-    this.serialCommunicationService.updatePIC();
+    try {
+      this.serialCommunicationService.updatePIC();
+    }
+    catch(Exception e) {
+      this.serialCommunicationService.getConsole()
+        .printWithTime("Erro: " + e.getMessage());
+    }
   }
 
   // TODO: implementar botão para limpar tela
