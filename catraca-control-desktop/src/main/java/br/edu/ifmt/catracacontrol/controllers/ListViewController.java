@@ -1,6 +1,7 @@
 package br.edu.ifmt.catracacontrol.controllers;
 
 import br.edu.ifmt.catracacontrol.domain.dto.ClientDto;
+import br.edu.ifmt.catracacontrol.domain.models.Status;
 import br.edu.ifmt.catracacontrol.domain.services.ClientService;
 import br.edu.ifmt.catracacontrol.domain.services.IClientService;
 import br.edu.ifmt.catracacontrol.views.HomeView;
@@ -48,6 +49,21 @@ public class ListViewController implements Initializable {
   @FXML
   private TableColumn<ClientDto, String> statusColumn;
 
+  @FXML
+  private Button updateStatusButton;
+
+  @FXML
+  void updateStatusButtonOnClicked(MouseEvent event) {
+    var client = clientTableView.getSelectionModel().getSelectedItem();
+
+    client.updateStatus();
+
+    service.update(client.toEntity());
+
+    clientTableView.getSelectionModel().clearSelection();
+    updateStatusButton.setDisable(true);
+    clientTableView.refresh();
+  }
 
   @FXML
   void backButtonOnClicked(MouseEvent event) throws Exception {
@@ -69,13 +85,16 @@ public class ListViewController implements Initializable {
 
   @Override public void initialize(URL location, ResourceBundle resources) {
     removeButton.setDisable(true);
+    updateStatusButton.setDisable(true);
     chargeTableView();
     clientTableView.getSelectionModel()
       .selectedItemProperty()
       .addListener((observable, oldValue, newValue) -> {
         removeButton.setDisable(false);
+        updateStatusButton.setDisable(false);
       });
   }
+
   // https://docs.oracle.com/javafx/2/ui_controls/table-view.htm
   // https://examples.javacodegeeks.com/desktop-java/javafx/tableview/javafx-tableview-example/
   // https://medium.com/@antonio.gabriel/javafx-trabalhando-com-tableview-5cc1065babab/
