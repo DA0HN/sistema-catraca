@@ -7,5 +7,5 @@
 #priority INT_RDA, INT_RB 
 #use delay(crystal=20000000)
 #use FIXED_IO(B_outputs=PIN_B3,PIN_B2,PIN_B1,PIN_B0)
-#use rs232(baud=115200,xmit=PIN_C6,rcv=PIN_C7,bits=8,stream=PORT1)
+#use rs232(baud=9600,parity=N,xmit=PIN_C6,rcv=PIN_C7,bits=8,stream=PORT1)
 
