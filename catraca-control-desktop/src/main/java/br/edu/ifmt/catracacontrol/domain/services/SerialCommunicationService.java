@@ -29,7 +29,7 @@ public class SerialCommunicationService {
 
   public SerialCommunicationService(SerialPort serialPort, Console console, IClientService clientService) {
     this.serialPort = serialPort;
-    this.serialPort.setComPortParameters(115200, 8, 1, SerialPort.NO_PARITY);
+    this.serialPort.setComPortParameters(9600, 8, 1, SerialPort.NO_PARITY);
     this.console = console;
     this.clientService = clientService;
     this.configureListeners();
@@ -62,6 +62,8 @@ public class SerialCommunicationService {
     var writer = this.serialPort.getOutputStream();
     try {
       writer.write('I');
+      TimeUnit.MILLISECONDS.sleep(400);
+      writer.flush();
       clients.forEach(client -> {
         try {
           var id = client.getId().intValue();
@@ -93,7 +95,7 @@ public class SerialCommunicationService {
       writer.flush();
       this.console.printWithTime("Atualização concluída!\n");
     }
-    catch(IOException e) {
+    catch(IOException | InterruptedException e) {
       e.printStackTrace();
       this.console.printWithTime("Ocorreu um erro durante a atualização do PIC\n" +
                                    "Erro: " + e.getMessage() + "\n");
