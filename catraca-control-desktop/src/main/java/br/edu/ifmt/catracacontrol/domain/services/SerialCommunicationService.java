@@ -135,19 +135,17 @@ public class SerialCommunicationService {
       this.console.printWithTime("Linha em branco!\n");
       return true;
     }
-
-    if(data.length < 4) {
-      this.console.printWithTime("Mensagem corrompida "+ Arrays.toString(data) +" :(\n");
-    }
-
     if(asList(data).contains("-")) {
       this.console.printWithTime(Arrays.toString(data) + " mensagem estranha...\n");
       return true;
     }
-
     if(String.join("", data).equals("update")) {
       this.console.printWithTime("Pedido de sincronização!\n");
       this.updatePIC();
+      return true;
+    }
+    if(data.length < 5) {
+      this.console.printWithTime("Mensagem corrompida "+ Arrays.toString(data) +" :(\n");
       return true;
     }
     return false;
