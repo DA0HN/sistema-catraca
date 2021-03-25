@@ -68,6 +68,7 @@ void novoCM(unsigned char nova[6]){ //ok // pos é o referencial do usuário e nov
          dados[pos][i] = nova[i];
       }
       saveM();
+      loadM();
    }else{
       printf(lcd_escreve,"\f Erro!\n");
       printf(lcd_escreve,"\r Memoria Cheia!\n");
