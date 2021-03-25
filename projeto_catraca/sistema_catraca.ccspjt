@@ -25,13 +25,15 @@ TotalDebug=0
 D3=24-03-2021
 D3_E=14
 D3_D=0
-D3_L=6
+D3_L=8
 D3_L1=[67953]Project Closed.
 D3_L2=[72183]Project Opened.
 D3_L3=[72235]Started Editing.
 D3_L4=[72793]Stopped Editing.
 D3_L5=[72872]Started Editing.
 D3_L6=[73176]Stopped Editing.
+D3_L7=[75105]Started Editing.
+D3_L8=[75408]Stopped Editing.
 
 [Opened Files]
 1=sistema_catraca.c
